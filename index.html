@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://oulu-aurora.pages.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="An aurora arc over a dark horizon">
+<meta property="og:image:alt" content="An aurora arc over a dark horizon, with the question asked in Finnish and English">
 <meta property="og:locale" content="en_GB">
 <meta property="og:locale:alternate" content="fi_FI">
 <meta property="og:locale:alternate" content="de_DE">
@@ -67,6 +67,9 @@ body{
   -webkit-font-smoothing:antialiased; transition:background-color .3s,color .3s;
 }
 .wrap{max-width:900px;margin:0 auto;padding:22px 20px 56px}
+.noscript{max-width:56ch;margin:0 auto;padding:3rem 1.5rem;color:var(--ink)}
+.noscript h1{font-size:1.5rem;font-weight:500;line-height:1.3;margin:0 0 1.25rem}
+.noscript p{font-size:1rem;line-height:1.65;color:var(--muted);margin:0 0 1rem}
 
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
   border-bottom:1px solid var(--rule);padding-bottom:12px}
@@ -214,6 +217,20 @@ footer{margin-top:26px;display:flex;justify-content:space-between;align-items:ce
 </style>
 </head>
 <body>
+<noscript>
+  <div class="noscript">
+    <h1>Can you see the northern lights in Oulu tonight?</h1>
+    <p>This page answers that from four things: how dark the sky gets, how much cloud
+    there is, where the moon is, and live magnetic activity measured at the Finnish
+    Meteorological Institute's nearest magnetometer, about 100&nbsp;km away.</p>
+    <p>It needs JavaScript, because the positions of the sun and moon are calculated in
+    your browser rather than on a server — which is also why the darkness reading keeps
+    working when the network does not.</p>
+    <p>Aurora season in Oulu runs roughly from September to April. Between late April
+    and mid&#8209;August the sky never gets dark enough, whatever the sun is doing.</p>
+  </div>
+</noscript>
+
 <div class="wrap">
 
   <div class="top">
@@ -227,11 +244,11 @@ footer{margin-top:26px;display:flex;justify-content:space-between;align-items:ce
         <option value="fr">Français</option>
         <option value="es">Español</option>
       </select>
-      <div class="seg"><button id="mode" aria-pressed="false" title="Night mode">◑</button></div>
+      <div class="seg"><button id="mode" aria-pressed="false">◑</button></div>
     </div>
   </div>
 
-  <section class="verdict">
+  <section class="verdict" aria-live="polite">
     <p class="eyebrow" id="t-eyebrow">Aurora tonight</p>
     <h1 class="answer" id="answer">Checking…</h1>
     <p class="because" id="because">—</p>
@@ -393,6 +410,7 @@ en:{ locale:'en-GB',
  bGoNow:(a,c,d)=>`${a} over Oulu — this is a rare one. ${c}, ${d}, and overhead rather than on the horizon.`,
  bCloudWay:(a,c)=>`${a} above the clouds, but ${c}. Worth watching for gaps.`,
  bestFrom:x=>` Best from ${x}.`,
+ nightMode:'Night mode',
  spotList:[
   {n:"Nallikari",d:"3.3 km north-west",t:"Sandy beach on the open sea. Face north over the water — the widest unobstructed northern horizon close to town, with the lighthouse in silhouette."},
   {n:"Hollihaka",d:"by the centre",t:"A park in town, right by the water. City glow is real, but it is the easiest option on foot if a display is already underway."},
@@ -489,6 +507,7 @@ fi:{ locale:'fi-FI',
  bGoNow:(a,c,d)=>`${a} Oulun yllä — tämä on harvinaista. ${c}, ${d}, ja pään päällä eikä horisontissa.`,
  bCloudWay:(a,c)=>`${a} pilvien yläpuolella, mutta ${c}. Kannattaa vahtia aukkoja.`,
  bestFrom:x=>` Parhaiten klo ${x} alkaen.`,
+ nightMode:'Yötila',
  spotList:[
   {n:"Nallikari",d:"3,3 km luoteeseen",t:"Hiekkaranta avomeren äärellä. Katso pohjoiseen veden yli — laajin esteetön pohjoinen taivaanranta lähellä keskustaa, majakka siluettina."},
   {n:"Hollihaka",d:"keskustassa",t:"Puisto aivan keskustassa, veden äärellä. Kaupungin valot haittaavat, mutta kävellen helpoin vaihtoehto jos revontulet ovat jo käynnissä."},
@@ -586,6 +605,7 @@ es:{ locale:'es-ES',
  bGoNow:(a,c,d)=>`${a} sobre Oulu: esto es raro. ${c}, ${d}, y en el cenit en vez de en el horizonte.`,
  bCloudWay:(a,c)=>`${a} por encima de las nubes, pero ${c}. Vigila los claros.`,
  bestFrom:x=>` Mejor a partir de las ${x}.`,
+ nightMode:'Modo nocturno',
  spotList:[
   {n:"Nallikari",d:"3,3 km al noroeste",t:"Playa de arena frente al mar abierto. Mira al norte sobre el agua: el horizonte norte más despejado cerca de la ciudad, con el faro recortado al fondo."},
   {n:"Hollihaka",d:"en el centro",t:"Un parque en pleno centro, junto al agua. Hay contaminación lumínica, pero es la opción más fácil a pie si la aurora ya ha empezado."},
@@ -672,6 +692,7 @@ de:{ locale:'de-DE',
  bGoNow:(a,c,d)=>`${a} über Oulu — das ist selten. ${c}, ${d}, und im Zenit statt am Horizont.`,
  bCloudWay:(a,c)=>`${a} über den Wolken, aber ${c}. Auf Lücken achten.`,
  bestFrom:x=>` Am besten ab ${x}.`,
+ nightMode:'Nachtmodus',
  spotList:[
   {n:"Nallikari",d:"3,3 km nordwestlich",t:"Sandstrand am offenen Meer. Blick nach Norden über das Wasser — der weiteste freie Nordhorizont in Stadtnähe, mit dem Leuchtturm als Silhouette."},
   {n:"Hollihaka",d:"im Zentrum",t:"Ein Park mitten in der Stadt, direkt am Wasser. Stadtlicht ist da, aber es ist die einfachste Option zu Fuß, wenn das Nordlicht schon läuft."},
@@ -768,6 +789,7 @@ fr:{ locale:'fr-FR',
  bGoNow:(a,c,d)=>`${a} au-dessus d’Oulu — c’est rare. ${c}, ${d}, et au zénith plutôt que sur l’horizon.`,
  bCloudWay:(a,c)=>`${a} au-dessus des nuages, mais ${c}. Guette les trouées.`,
  bestFrom:x=>` Au mieux à partir de ${x}.`,
+ nightMode:'Mode nuit',
  spotList:[
   {n:"Nallikari",d:"3,3 km au nord-ouest",t:"Plage de sable face à la mer ouverte. Regarde vers le nord au-dessus de l’eau : l’horizon nord le plus dégagé près de la ville, avec le phare en silhouette."},
   {n:"Hollihaka",d:"dans le centre",t:"Un parc en plein centre, au bord de l’eau. La lumière urbaine est bien là, mais c’est l’option la plus simple à pied si l’aurore a déjà commencé."},
@@ -820,6 +842,10 @@ const SPOTGEO=[
  {lat:65.0673,lon:25.4710,pid:'ChIJg_2RvQEtgEYRz7e31CjkQAU'},
  {lat:65.0515,lon:25.4981,pid:'ChIJB57E8zwtgEYRUjx4xOGI0t4'}
 ];
+
+/* Raw API responses, kept so a language change re-renders rather than refetches.
+   Five language clicks used to mean ten network requests for identical data. */
+let RAW = { wx: null, sw: null };
 
 let LANG='en', MODE='day';
 try{ const l=localStorage.getItem('oulu-lang'); if(l&&STR[l]) LANG=l;
@@ -930,7 +956,10 @@ function draw(pts,low,win){
     const i=Math.min(m/6,pts.length-1);
     const an = j===0?'start' : j===arr.length-1?'end' : 'middle';
     s+=`<text class="axis" x="${x(i)}" y="${H-6}" text-anchor="${an}">${fmtT(pts[i].t)}</text>`; });
-  document.getElementById('chart').innerHTML=s;
+  const cv=document.getElementById('chart');
+  cv.innerHTML=s;
+  cv.setAttribute('aria-label', t('chartTitle')+': '+tierOf(low.el).name
+    +', '+low.el.toFixed(1)+'° '+fmtT(low.t)+'.');
 }
 
 
@@ -976,7 +1005,9 @@ function drawYear(now){
     if(nar) lab=lab.slice(0,3);
     s+=`<text class="axis" x="${(L+md0*bw+bw*(nar?28:14)).toFixed(1)}" y="${H-7}" text-anchor="middle">${lab}</text>`;
   }
-  document.getElementById('year').innerHTML=s;
+  const ys=document.getElementById('year');
+  ys.innerHTML=s;
+  ys.setAttribute('aria-label', t('season')+': '+lab+'.');
 }
 
 /* ==========  CAMERA  ========== */
@@ -1082,6 +1113,8 @@ function drawSky(darkTier, r, kp, moon){
       +(a===0?' fill="var(--accent)"':'')+'>'+v[1]+'</text>'; });
   g+='<text class="axis" x="'+(W/2)+'" y="'+(H-3)+'" text-anchor="middle">'+t('skyFacing')+'</text>';
   svg.innerHTML=g;
+  svg.setAttribute('aria-label', t('skyTitle')+': '
+    + (band ? t('skyBand')+' '+band[0]+'–'+band[1]+'°' : t('skyTooLight')) + '.');
 }
 
 /* ==========  UI  ========== */
@@ -1131,7 +1164,10 @@ function paintStatic(){
     `<div class="tip-item">${ico(TIPICONS[i]||'clock')}<b>${x.h}</b><p>${x.p}</p></div>`).join('');
   set('t-gloss',t('gloss')); set('t-status',t('status')); set('refresh',t('refresh'));
   document.getElementById('lang').value=LANG;
-  document.getElementById('mode').setAttribute('aria-pressed',MODE==='night');
+  const mb=document.getElementById('mode');
+  mb.setAttribute('aria-pressed',MODE==='night');
+  mb.setAttribute('aria-label',t('nightMode'));
+  mb.setAttribute('title',t('nightMode'));
   document.getElementById('spotlist').innerHTML=STR[LANG].spotList.map((s,i)=>{
     const g=SPOTGEO[i]; if(!g) return '';
     const url=`https://www.google.com/maps/search/?api=1&query=${g.lat},${g.lon}&query_place_id=${g.pid}`;
@@ -1150,7 +1186,7 @@ function stamp(){
 }
 
 /* ==========  MAIN  ========== */
-async function run(){
+async function run(refetch = true){
   feeds.length=0; paintStatic();
   const now=new Date();
   document.getElementById('today').textContent=fmtD(now);
@@ -1174,11 +1210,15 @@ async function run(){
 
   let cloud=null, hourly=null;
   try{
-    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`
-      +`&current=temperature_2m&hourly=cloud_cover,precipitation,precipitation_probability&daily=sunrise,sunset,daylight_duration`
-      +`&timezone=Europe%2FHelsinki&past_days=7&forecast_days=4`);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d=await r.json();
+    let d;
+    if(!refetch && RAW.wx) d = RAW.wx;
+    else {
+      const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`
+        +`&current=temperature_2m&hourly=cloud_cover,precipitation,precipitation_probability&daily=sunrise,sunset,daylight_duration`
+        +`&timezone=Europe%2FHelsinki&past_days=7&forecast_days=4`);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      d = await r.json(); RAW.wx = d;
+    }
     const omOff=(d.utc_offset_seconds||0)*1000;
     const omDate=str=>new Date(Date.parse(str+'Z')-omOff);
     hourly=d.hourly; hourly.t=hourly.time.map(omDate);
@@ -1231,8 +1271,13 @@ async function run(){
 
   let kp=null,bz=null,fc=[],local=null;
   try{
-    const r=await fetch('/api/spacewx'); const d=await r.json();
-    if(!r.ok) throw new Error((d.notes&&d.notes.join('; '))||('HTTP '+r.status));
+    let d;
+    if(!refetch && RAW.sw) d = RAW.sw;
+    else {
+      const r=await fetch('/api/spacewx'); d=await r.json();
+      if(!r.ok) throw new Error((d.notes&&d.notes.join('; '))||('HTTP '+r.status));
+      RAW.sw = d;
+    }
     kp=d.peak!=null?d.peak:d.current; bz=d.bz; fc=d.forecast||[]; local=d.local||null;
     if(kp==null && !local) throw new Error('no data');
     const lr = local?local.best.r:null;              /* provisional bands */
@@ -1356,7 +1401,7 @@ async function run(){
   lastRun=Date.now(); stamp();
 }
 
-function setLang(l){ LANG=l; try{localStorage.setItem('oulu-lang',l);}catch(e){} run(); }
+function setLang(l){ LANG=l; try{localStorage.setItem('oulu-lang',l);}catch(e){} run(false); }
 document.getElementById('lang').addEventListener('change',e=>setLang(e.target.value));
 document.getElementById('mode').addEventListener('click',()=>{
   MODE=MODE==='night'?'day':'night';
