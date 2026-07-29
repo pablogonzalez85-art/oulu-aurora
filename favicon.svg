@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Aurora arc over a dark horizon">
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"   stop-color="#CDF6E9"/>
+      <stop offset=".45" stop-color="#A2E9D2"/>
+      <stop offset="1"   stop-color="#F478AF" stop-opacity=".8"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="13" fill="#150E33"/>
+  <path d="M11 47C11 23 21 11 32.5 11S54 23 54 47" fill="none" stroke="url(#a)"
+        stroke-width="13" stroke-linecap="round"/>
+  <rect y="50" width="64" height="14" fill="#08051A"/>
+</svg>

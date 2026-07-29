@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oulu — darkness &amp; aurora</title>
+<meta name="description" content="Can you see the northern lights in Oulu tonight? Live darkness, cloud, moon and space weather.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#150E33">
+
+<!-- Social share card. These four URLs assume a Cloudflare project named
+     "oulu-aurora". Change all of them if your project name or domain differs. -->
+<link rel="canonical" href="https://oulu-aurora.pages.dev/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://oulu-aurora.pages.dev/">
+<meta property="og:site_name" content="Oulu — darkness &amp; aurora">
+<meta property="og:title" content="Oulu — darkness &amp; aurora">
+<meta property="og:description" content="Can you see the northern lights in Oulu tonight? Live darkness, cloud, moon and space weather — plus where to go.">
+<meta property="og:image" content="https://oulu-aurora.pages.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="An aurora arc over a dark horizon">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="fi_FI">
+<meta property="og:locale:alternate" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Oulu — darkness &amp; aurora">
+<meta name="twitter:description" content="Can you see the northern lights in Oulu tonight?">
+<meta name="twitter:image" content="https://oulu-aurora.pages.dev/og.png">
+<meta name="apple-mobile-web-app-title" content="Oulu aurora">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#150E33; --ink:#EAE6F7; --muted:#8E86BE;
+  --accent:#A2E9D2; --hot:#F478AF; --rule:rgba(162,233,210,.15);
+  --b-day:rgba(244,120,175,.15); --b-civil:rgba(54,41,131,.40); --b-naut:rgba(54,41,131,.60);
+  --b-astro:rgba(21,14,51,.72); --b-night:rgba(8,5,24,.9);
+  --c-win:rgba(162,233,210,.13); --c-wins:rgba(162,233,210,.45);
+  --glow1:rgba(54,41,131,.8); --glow2:rgba(162,233,210,.08);
+  --display:"Space Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+body[data-mode="night"]{
+  --night:#0A0000; --ink:#FF8368; --muted:#C2634C;
+  --accent:#FF6B4A; --hot:#FF4A28; --rule:rgba(255,107,74,.16);
+  --b-day:rgba(255,74,40,.13); --b-civil:rgba(120,26,10,.35); --b-naut:rgba(120,26,10,.55);
+  --b-astro:rgba(50,8,2,.7); --b-night:rgba(18,2,0,.9);
+  --c-win:rgba(255,122,94,.12); --c-wins:rgba(255,122,94,.42);
+  --glow1:rgba(90,16,4,.7); --glow2:rgba(255,107,74,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1000px 560px at 80% -14%, var(--glow1), transparent 60%),
+    radial-gradient(700px 460px at 6% 2%, var(--glow2), transparent 58%),
+    var(--night);
+  color:var(--ink); font-family:var(--display); min-height:100vh;
+  -webkit-font-smoothing:antialiased; transition:background-color .3s,color .3s;
+}
+.wrap{max-width:900px;margin:0 auto;padding:22px 20px 56px}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  border-bottom:1px solid var(--rule);padding-bottom:12px}
+.coord{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.date{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--rule)}
+.seg button{font-family:var(--mono);font-size:10px;letter-spacing:.12em;background:transparent;
+  color:var(--muted);border:0;padding:7px 10px;cursor:pointer;min-height:32px}
+.seg button[aria-pressed="true"]{color:var(--night);background:var(--accent)}
+#lang{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;background:transparent;
+  color:var(--accent);border:1px solid var(--rule);padding:7px 8px;min-height:32px;cursor:pointer}
+#lang:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+#lang option{background:var(--night);color:var(--ink)}
+.seg button:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+
+.verdict{padding:32px 0 26px}
+.eyebrow.storm{color:var(--hot)}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.answer{font-size:clamp(2.6rem,9vw,4.2rem);font-weight:700;line-height:.98;letter-spacing:-.035em;margin:0}
+.answer.storm{font-size:clamp(3rem,10.5vw,5.2rem)}
+.answer.go{color:var(--accent)} .answer.maybe{color:var(--hot)} .answer.no{color:var(--ink);opacity:.62}
+.because{margin:16px 0 0;font-size:1.05rem;line-height:1.55;max-width:56ch;opacity:.9}
+.because strong{color:var(--accent);font-weight:500}
+.window{margin:18px 0 0;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;
+  display:inline-block;padding:9px 14px;border:1px solid var(--rule);color:var(--accent)}
+.window.none{color:var(--muted)}
+
+.profile{padding:2px 0 22px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.sectitle{margin:22px 0 12px}
+h2{font-size:.98rem;font-weight:500;margin:0}
+.caption{margin:10px 0 0;font-size:.82rem;line-height:1.5;color:var(--muted);max-width:62ch}
+svg{display:block;width:100%;height:auto}
+.skylabel{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;fill:var(--accent)}
+.compass{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;fill:var(--muted)}
+.band-label{font-family:var(--mono);font-size:8px;letter-spacing:.12em;fill:var(--muted)}
+.axis{font-family:var(--mono);font-size:9px;fill:var(--muted)}
+
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);
+  border-bottom:1px solid var(--rule)}
+.gate{background:var(--night);padding:17px 15px 18px}
+.gate-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.ico{width:14px;height:14px;flex:0 0 auto;fill:none;stroke:currentColor;
+  stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+.ico [fill="currentColor"]{stroke:none}
+.lbl{display:flex;align-items:center;gap:6px;min-width:0}
+.lbl .ico{opacity:.8}
+.tip-item .ico{width:19px;height:19px;display:block;margin-bottom:9px;color:var(--accent);stroke-width:1.25}
+.qbtn{flex:0 0 auto;width:17px;height:17px;border-radius:50%;border:1px solid var(--rule);
+  background:transparent;color:var(--muted);font-family:var(--mono);font-size:10px;line-height:1;
+  cursor:pointer;padding:0;display:grid;place-items:center}
+.qbtn:hover,.qbtn[aria-expanded="true"]{color:var(--night);background:var(--accent);border-color:var(--accent)}
+.qbtn:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.qbox{display:none;margin-top:11px;font-size:.76rem;line-height:1.55;color:var(--ink);opacity:.9;
+  padding:10px 11px;border-left:2px solid var(--accent);background:var(--c-win)}
+.qbox.show{display:block}
+.disclaimer{margin-top:28px;padding-top:16px;border-top:1px solid var(--rule);
+  font-size:.79rem;line-height:1.55;color:var(--muted);max-width:64ch}
+.privacytext{margin:12px 0 0;font-size:.83rem;line-height:1.6;color:var(--muted);
+  max-width:64ch;white-space:pre-line}
+.attrib{margin-top:14px;font-family:var(--mono);font-size:10px;line-height:1.6;color:var(--muted)}
+.gate-value{font-family:var(--mono);font-size:1.6rem;font-weight:600;line-height:1;letter-spacing:-.02em}
+.gate-note{margin-top:8px;font-size:.77rem;line-height:1.42;color:var(--muted)}
+.moonrow{display:flex;align-items:center;gap:9px}
+.moondisc{width:22px;height:22px;flex:0 0 auto;color:currentColor}
+.moonrow.dim .moondisc{opacity:.4}
+.pass{color:var(--accent)} .fail{color:var(--ink);opacity:.5} .warn{color:var(--hot)}
+
+section.block{margin-top:30px}
+section.block h2{margin-bottom:12px}
+.nights{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.night{background:var(--night);padding:14px 13px 15px}
+.night .when{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.night .score{font-size:1rem;font-weight:500;margin-bottom:7px}
+.night .bits{font-family:var(--mono);font-size:10.5px;line-height:1.7;color:var(--muted)}
+
+.spots{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+.spot{background:var(--night);padding:15px 14px 16px}
+.spot .nm{font-size:1rem;font-weight:500;margin-bottom:3px}
+.spot .dist{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:9px}
+.spot .txt{font-size:.83rem;line-height:1.5;color:var(--muted)}
+.spot .maplink{display:inline-block;margin-top:11px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--accent);text-decoration:none;
+  border-bottom:1px solid var(--rule);padding-bottom:2px}
+.spot .maplink:hover{border-color:var(--accent)}
+.spot .maplink:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.spot .coords{margin-top:8px;font-family:var(--mono);font-size:9.5px;color:var(--muted);opacity:.75}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+.tip-item{background:var(--night);padding:15px 15px 17px}
+.tip-item b{display:block;font-size:.95rem;font-weight:500;margin-bottom:6px;color:var(--ink)}
+.tip-item p{margin:0;font-size:.83rem;line-height:1.55;color:var(--muted)}
+.safety{margin-top:12px;font-size:.8rem;line-height:1.5;color:var(--muted);
+  padding-left:11px;border-left:2px solid var(--hot)}
+
+.ledger{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:18px}
+.cell dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.cell dd{margin:0;font-family:var(--mono);font-size:1.08rem;font-weight:500}
+
+details{margin-top:26px;border-top:1px solid var(--rule);padding-top:16px}
+summary{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;list-style:none;padding:5px 0;min-height:30px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+ ";color:var(--accent)}
+details[open] summary::before{content:"– "}
+summary:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.gloss{margin-top:12px}
+.gloss div{margin-bottom:13px;max-width:62ch}
+.scale{margin-top:12px}
+.scale h4{margin:11px 0 5px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);font-weight:400}
+.scale div{display:flex;gap:10px;font-size:.74rem;line-height:1.5;padding:1.5px 0}
+.scale span:first-child{flex:0 0 84px;font-family:var(--mono);color:var(--ink);opacity:.85}
+.scale span:last-child{color:var(--muted)}
+.gloss b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--accent);margin-bottom:3px;font-weight:500}
+.sumval{color:var(--ink);opacity:.75;text-transform:none;letter-spacing:.02em}
+.gloss p{margin:0;font-size:.85rem;line-height:1.55;color:var(--muted)}
+
+.feed{font-family:var(--mono);font-size:10.5px;line-height:1.75;display:flex;gap:8px;align-items:flex-start}
+.feed .mark{width:11px;flex-shrink:0}
+.feed.ok .mark{color:var(--accent)} .feed.bad .mark{color:var(--hot)}
+.feed.bad span:last-child{color:var(--hot)}
+.tip{margin-top:10px;padding:10px 12px;border-left:2px solid var(--hot);
+  font-size:.79rem;line-height:1.55;opacity:.85;display:none}
+.tip.show{display:block}
+
+footer{margin-top:26px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.stamp{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted)}
+#refresh{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+  background:transparent;color:var(--accent);border:1px solid var(--rule);
+  padding:11px 19px;cursor:pointer;min-height:40px}
+#refresh:hover{background:var(--c-win);border-color:var(--accent)}
+#refresh:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+
+@media (max-width:680px){
+  .wrap{padding:18px 16px 48px}
+  .gates{grid-template-columns:repeat(2,1fr)}
+  .nights{grid-template-columns:1fr}
+  .because{font-size:1rem}
+}
+@media (max-width:400px){ .gates{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span class="coord">Oulu · 65.01°N 25.47°E</span>
+    <div class="controls">
+      <span class="date" id="today">—</span>
+      <select id="lang" aria-label="Language">
+        <option value="en">English</option>
+        <option value="fi">Suomi</option>
+        <option value="de">Deutsch</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+      </select>
+      <div class="seg"><button id="mode" aria-pressed="false" title="Night mode">◑</button></div>
+    </div>
+  </div>
+
+  <section class="verdict">
+    <p class="eyebrow" id="t-eyebrow">Aurora tonight</p>
+    <h1 class="answer" id="answer">Checking…</h1>
+    <p class="because" id="because">—</p>
+    <div class="window none" id="window">—</div>
+  </section>
+
+  <section class="profile">
+    <div class="sectitle"><h2 id="t-chart">How deep the night goes</h2></div>
+    <svg id="chart" viewBox="0 0 900 250" role="img" aria-label="Sun elevation tonight"></svg>
+    <p class="caption" id="t-caption">—</p>
+  </section>
+
+  <div class="gates">
+    <div class="gate"><div class="gate-label"><span class="lbl" data-ico="dark"><span id="t-g-dark">Darkness</span></span><button class="qbtn" data-q="dark" aria-expanded="false">?</button></div>
+      <div class="gate-value" id="darkVal">—</div><div class="gate-note" id="darkNote">—</div><div class="qbox" id="darkQ"></div></div>
+    <div class="gate"><div class="gate-label"><span class="lbl" data-ico="cloud"><span id="t-g-cloud">Cloud</span></span><button class="qbtn" data-q="cloud" aria-expanded="false">?</button></div>
+      <div class="gate-value" id="cloudVal">—</div><div class="gate-note" id="cloudNote">—</div><div class="qbox" id="cloudQ"></div></div>
+    <div class="gate"><div class="gate-label"><span class="lbl" data-ico="moon"><span id="t-g-moon">Moon</span></span><button class="qbtn" data-q="moon" aria-expanded="false">?</button></div>
+      <div class="gate-value" id="moonVal">—</div><div class="gate-note" id="moonNote">—</div><div class="qbox" id="moonQ"></div></div>
+    <div class="gate"><div class="gate-label"><span class="lbl" data-ico="kp"><span id="t-g-kp">Aurora chance</span></span><button class="qbtn" data-q="kp" aria-expanded="false">?</button></div>
+      <div class="gate-value" id="kpVal">—</div><div class="gate-note" id="kpNote">—</div><div class="qbox" id="kpQ"></div></div>
+  </div>
+
+  <dl class="ledger">
+  <div class="cell"><dt id="t-sunrise">Sunrise</dt><dd id="sunrise">—</dd></div>
+  <div class="cell"><dt id="t-sunset">Sunset</dt><dd id="sunset">—</dd></div>
+  <div class="cell"><dt id="t-daylen">Day length</dt><dd id="daylen">—</dd></div>
+  <div class="cell"><dt id="t-week">Change this week</dt><dd id="weekdelta">—</dd></div>
+  <div class="cell"><dt id="t-temp">Temperature</dt><dd id="tempVal">—</dd></div>
+  <div class="cell"><dt id="t-rain">Rain tonight</dt><dd id="rainVal">—</dd></div>
+  </dl>
+
+  <section class="block"><h2 id="t-outlook">Next three nights</h2>
+    <div class="nights" id="nights"></div></section>
+
+  <section class="block"><h2 id="t-season">Aurora season in Oulu</h2>
+    <svg id="year" viewBox="0 0 900 120" role="img" aria-label="Hours of darkness across the year"></svg>
+    <p class="caption" id="t-seasoncap">—</p>
+  </section>
+
+  <section class="block"><h2 id="t-spots">Where to go</h2>
+    <div class="spots" id="spotlist"></div>
+    <p class="safety" id="t-safety">—</p>
+    <p class="attrib" id="t-spotsource"></p></section>
+
+
+  <section class="block"><h2 id="t-sky">Where to look</h2>
+    <svg id="sky" viewBox="0 0 900 320" role="img" aria-label="Where in the northern sky to look"></svg>
+    <p class="caption" id="t-skycap">—</p></section>
+
+  <section class="block"><h2 id="t-tips">Before you go</h2>
+    <div class="tips" id="tiplist"></div></section>
+
+  <details><summary id="t-camera">Camera settings</summary>
+    <div class="gloss" id="camlist"></div></details>
+
+  <details><summary id="t-gloss">What the numbers mean</summary>
+    <div class="gloss" id="glosslist"></div></details>
+
+  <details><summary id="t-privacy">Privacy</summary>
+    <p class="privacytext" id="t-privacytext"></p></details>
+
+  <details><summary id="t-status">Status</summary>
+    <div id="feedlist" style="margin-top:12px"></div>
+    <p class="attrib" id="t-attrib"></p>
+    <div class="tip" id="tip"></div></details>
+
+  <p class="disclaimer" id="t-disclaimer"></p>
+
+  <footer>
+    <span class="stamp" id="stamp"></span>
+    <button id="refresh">Refresh</button>
+  </footer>
+</div>
+
+<script>
+/* ==========  STRINGS  ========== */
+const STR = {
+en:{ locale:'en-GB',
+ eyebrow:'Aurora tonight', checking:'Checking…', working:'Working out how dark it gets.',
+ chartTitle:'How deep the night goes',
+ caption:'The pink line is the sun through the night. Aurora needs it below the −12° line, and the darker the band it sits in, the better. The highlighted column is tonight’s best window; the strip underneath shows when the moon is up.',
+ gDark:'Darkness', gCloud:'Cloud', gMoon:'Moon', gKp:'Aurora chance',
+ outlook:'Next three nights', tonight:'Tonight', spots:'Where to go',
+ safety:'Take care near water, and never walk on sea or lake ice unless you know it is safe. Dress for standing still — aurora watching is cold work.',
+ sunrise:'Sunrise', sunset:'Sunset', daylen:'Day length', week:'Change this week', temp:'Temperature',
+ gloss:'What the numbers mean', status:'Status', refresh:'Refresh', updated:'Updated',
+ justNow:'just now', minsAgo:m=>`${m} min ago`,
+ bandDay:'DAYLIGHT', bandCivil:'CIVIL', bandNaut:'NAUTICAL', bandAstro:'ASTRONOMICAL',
+ bandNight:'FULL NIGHT', moonAxis:'moon',
+ tierCivil:'Civil twilight only', tierNaut:'Nautical twilight',
+ tierAstro:'Astronomically dark', tierNight:'Full night',
+ phases:['New','Waxing crescent','First quarter','Waxing gibbous','Full','Waning gibbous','Last quarter','Waning crescent'],
+ winSearch:'Finding the best window…', winFound:(a,b)=>`Best window  ${a} – ${b}`,
+ winNoDark:'No window tonight — never dark enough', winNoClear:'No window tonight — too much cloud',
+ hNotTonight:'Not tonight', hProbablyNot:'Probably not', hClouded:'Clouded out',
+ hQuiet:'Quiet sky', hMoon:'Moon in the way', hGo:'Go outside', hLook:'Worth a look',
+ bNeverDark:(d,n)=>`The sky never gets past civil twilight. Properly dark nights return around <strong>${d}</strong> — ${n} days from now.`,
+ bNeverDarkPlain:'The sky never gets past civil twilight right now.',
+ bNaut:'Nautical twilight at best. Only a strong display would show through, and the northern horizon stays washed out.',
+ bClouded:c=>`Dark enough, but ${c}% cloud overnight. Nothing gets through that.`,
+ bQuiet:k=>`Dark enough, but Kp ${k} over Oulu. Worth a glance north, not a trip out.`,
+ bMoon:(i,a)=>`${i}% moon sitting ${a}° above the horizon at the darkest point. Only a bright display will beat it.`,
+ bGo:(k,c,d)=>`Kp ${k}, ${c}, ${d}. Get away from the streetlights.`,
+ bLook:(d,c,k)=>`${d}, ${c}, Kp ${k}. Check the northern horizon.`,
+ clear:'clear', cloudPct:c=>`${c}% cloud`, cloudUnknown:'cloud unknown', kpUnknown:'unknown',
+ nDarkNote:(n,t)=>`${n}. Lowest ${t}.`,
+ nCloudNote:'Mean over the dark hours ahead.', nCloudNone:'No dark hours in range.',
+ nMoonUp:(p,a,s)=>`${p}, ${a}° up at darkest. ${s}`,
+ nMoonDown:p=>`${p}, below horizon at darkest. No interference.`,
+ moonWash:'Washes out faint aurora.', moonGlare:'Some glare.',
+ kpStorm:'Storm level.', kpActive:'Active.', kpLow:'Northern horizon only.', kpQuiet:'Very quiet.',
+ bzLine:(v,d)=>`Bz ${v} nT ${d}. `, bzSouthGood:'south — favourable', bzSouth:'south — mildly favourable', bzNorth:'north — unfavourable',
+ sTooLight:'Too light', sClouded:'Clouded', sMoonlit:'Moonlit', sPromising:'Promising', sPossible:'Possible',
+ bSun:'sun', bCloud:'cloud', bMoonUp:'up', bMoonDown:'down',
+ fSunMoon:'Sun and moon', fSunMoonD:'computed locally, no network needed',
+ fWeather:'Weather · Open-Meteo', fWeatherD:'cloud, temperature, sun times',
+ fSpace:'Space weather', fSpaceOk:'NOAA via your function',
+ fBlocked:'blocked or offline', fNoFn:'function not reachable — only works on the deployed site',
+ fPartial:'partial', unavailable:'Unavailable.',
+ tipService:'The browser is fine — another feed loaded from the same page, so this is the service itself. Darkness and moon are computed locally and stay accurate regardless.',
+ tipAll:'Every network feed failed. If you opened this file from disk, the serverless function will not exist — use the deployed site instead.',
+ season:'Aurora season in Oulu', seasonCap:'Each bar is one night, and its height is how many hours the sun spends below −12°. Where the bars vanish, aurora are simply impossible — that is the Oulu summer, not bad luck.',
+ darkHrs:'h dark', seasonNone:'no dark nights',
+ camera:'Camera settings', camIso:'ISO', camShutter:'Shutter', camAperture:'Aperture',
+ camFocus:'Focus', camPhone:'Phone',
+ camFocusV:'Manual, set to infinity — autofocus will hunt in the dark',
+ camPhoneV:'Night mode, propped on something solid. 10–30 seconds. Turn off the flash.',
+ camNote:'A starting point derived from tonight’s activity and moonlight. Shoot one frame, look at it, adjust. A tripod matters more than any of these numbers.',
+ camFaint:'Faint aurora move slowly, so you can leave the shutter open.',
+ camBright:'Bright aurora move fast — keep the shutter short or the structure smears.',
+ camMoon:'Moonlight is doing some of the work, so pull the ISO down.',
+ ask:'Explain', localLbl:(st,km)=>`${st}, ${km} km away · last 90 min`,
+ kpRef:k=>`Global Kp ${k}`,
+ attribution:'Magnetometer data: Finnish Meteorological Institute, CC BY 4.0. Thresholds provisional.',
+ qDark:'How far the sun sinks below the horizon tonight. Aurora need it below −12°, and below −18° is better still. This is pure astronomy, computed in your browser, and it is the one thing no forecast can change.',
+ qCloud:'Average cloud cover across the dark hours ahead. Aurora happen around 100 km up, so thick cloud hides them completely — it makes no difference how active the sky is above it. Under 40% is workable.',
+ qMoon:'How much of the moon is lit, and whether it is above the horizon when the sky is at its darkest. A full moon high up drowns faint aurora as effectively as cloud. Below the horizon, its phase does not matter at all.',
+ qKp:'The headline figure is the magnetic disturbance at the Finnish Meteorological Institute station nearest Oulu — the largest swing in the horizontal field over the last 90 minutes, in nanotesla. A magnetometer 100 km away tells you more than the global Kp index, which is a three-hour planetary average. Kp is shown alongside for reference. The thresholds are provisional and will be tightened over the winter, checked against nights aurora actually appear.',
+ rain:'Rain tonight', rainNone:'none', bRain:'rain',
+ fMag:'Magnetometer · FMI', fKp:'Planetary Kp · NOAA SWPC', fWind:'Solar wind · NOAA SWPC',
+ bzSouthStrong:'south — strongly favourable',
+ kpScale:[
+  {h:'Local disturbance · last 90 min',r:[['under 100 nT','quiet; ordinary night-time drift'],
+   ['100–250 nT','something stirring; look north'],['250–500 nT','active; good chance overhead'],
+   ['over 500 nT','storm']]},
+  {h:'Global Kp · planetary, 3-hourly',r:[['under 2','too quiet for Oulu'],
+   ['2–3','northern horizon only'],['4–5','can reach overhead'],['over 5','geomagnetic storm']]},
+  {h:'Bz · direction of the solar wind field',r:[['above 0','pointing north; unfavourable'],
+   ['0 to −5','mildly favourable'],['−5 to −10','favourable'],['below −10','strongly favourable']]}],
+ disclaimer:'Forecasts are estimates, not promises. The local thresholds are provisional and are being calibrated through the 2026–27 season.',
+ privacy:'Privacy',
+ privacyText:'No cookies, no analytics, no tracking of any kind. Your language and night-mode choices are kept on your own device and are never sent anywhere.\n\nThree outside services are involved. Space weather and magnetometer readings are fetched by this site\u2019s own server, so NOAA and the Finnish Meteorological Institute learn nothing about you. Weather data is requested by your browser directly from Open-Meteo, and the typefaces load from Google Fonts \u2014 both therefore see your IP address, as any web request does. Nothing else leaves your device.',
+ spotSource:'Locations based on Visit Oulu\u2019s published guidance.',
+ tipsTitle:"Before you go", dirLabel:"Directions",
+ tips:[{h:"Be patient",p:"Aurora arrive in bursts. A good night is often an hour of nothing followed by twenty minutes of everything. Plan to stay out, not to check and leave."},{h:"Let your eyes adjust",p:"Twenty minutes in the dark makes an enormous difference, and one glance at a phone screen undoes it. Use the red night mode on this page."},{h:"Look north, and look low",p:"From Oulu most displays begin as a faint arc along the northern horizon. Only strong activity climbs overhead."},{h:"It looks grey, not green",p:"Faint aurora read as a pale grey haze to the naked eye. A camera sees the colour long before you do — take a test shot at high ISO to find out whether that cloud is actually aurora."},{h:"Get away from streetlights",p:"Even a few hundred metres helps. Turn your back on car headlights and let the sky be the brightest thing in view."},{h:"Dress for standing still",p:"You will not be walking. Add a layer beyond what seems sensible, and bring something to sit on."}],
+ skyTitle:"Where to look", skyCap:"Your view facing north. The band shows roughly how high in the sky aurora are likely tonight — low on the horizon when activity is quiet, overhead when it is strong. Trees and buildings block exactly the low part where quiet aurora sit, which is why an open northern horizon matters.", skyBand:"likely aurora", skyTooLight:"Not dark enough tonight", skyFacing:"facing north",
+ cN:"N", cNE:"NE", cNW:"NW", cW:"W", cE:"E",
+ hGoNow:'Go outside now', hCloudWay:'Cloud in the way', eyebrowStorm:'Geomagnetic storm',
+ bNautQuiet:k=>`Nautical twilight at best, and only ${k} over Oulu. Nothing to see, and not dark enough to see it.`,
+ bGoNow:(a,c,d)=>`${a} over Oulu — this is a rare one. ${c}, ${d}, and overhead rather than on the horizon.`,
+ bCloudWay:(a,c)=>`${a} above the clouds, but ${c}. Worth watching for gaps.`,
+ bestFrom:x=>` Best from ${x}.`,
+ spotList:[
+  {n:"Nallikari",d:"3.3 km north-west",t:"Sandy beach on the open sea. Face north over the water — the widest unobstructed northern horizon close to town, with the lighthouse in silhouette."},
+  {n:"Hollihaka",d:"by the centre",t:"A park in town, right by the water. City glow is real, but it is the easiest option on foot if a display is already underway."},
+  {n:"Kuivasjärvi",d:"6 km north",t:"Lakeshore near the university. Open water to the north and darker than the city core — the southern shore gives the clearest view across the lake."},
+  {n:"Pyykösjärvi",d:"4.5 km north-east",t:"The other university lake. Similar view, usually quieter than Kuivasjärvi."}],
+ glossary:[
+  {t:'Kp index', p:'A 0–9 scale of geomagnetic activity worldwide. Oulu sits far enough north that Kp 2 already puts aurora on the northern horizon, and Kp 4 or more can bring it overhead. Below Kp 2, do not bother getting cold.'},
+  {t:'Bz', p:'The direction of the magnetic field arriving from the sun, in nanotesla. When it points south — a negative number — Earth’s magnetic field opens up and aurora becomes far more likely. Bz is a better early warning than Kp, which describes what already happened.'},
+  {t:'Civil, nautical, astronomical', p:'How far the sun has sunk below the horizon: 6°, 12° and 18°. Aurora needs at least −12°. In an Oulu summer the sun never gets that low, which is why nothing is visible between roughly late April and mid August.'},
+  {t:'The moon', p:'A bright moon washes out faint aurora as effectively as cloud. A full moon high in the sky can hide everything but a strong display. Check both how full it is and whether it is actually above the horizon.'},
+  {t:'The season', p:'The Finnish Meteorological Institute reckons aurora are visible in Oulu on roughly 25% of nights — whenever it is dark and clear. The season runs about September to April.'}]
+},
+fi:{ locale:'fi-FI',
+ eyebrow:'Revontulet tänä yönä', checking:'Tarkistetaan…', working:'Lasketaan kuinka pimeäksi tulee.',
+ chartTitle:'Kuinka pimeäksi yö menee',
+ caption:'Vaaleanpunainen viiva on aurinko yön aikana. Revontulet vaativat, että se on −12° viivan alapuolella — mitä tummempi vyöhyke, sitä parempi. Korostettu palsta on yön paras hetki, ja alapuolen palkki näyttää milloin kuu on näkyvissä.',
+ gDark:'Pimeys', gCloud:'Pilvisyys', gMoon:'Kuu', gKp:'Todennäköisyys',
+ outlook:'Seuraavat kolme yötä', tonight:'Tänä yönä', spots:'Minne mennä',
+ safety:'Ole varovainen vesistöjen lähellä, äläkä kävele meri- tai järvijäällä ellet ole varma sen kestävyydestä. Pukeudu paikallaan seisomiseen — revontulten katselu on kylmää puuhaa.',
+ sunrise:'Auringonnousu', sunset:'Auringonlasku', daylen:'Päivän pituus',
+ week:'Muutos tällä viikolla', temp:'Lämpötila',
+ gloss:'Mitä luvut tarkoittavat', status:'Tila', refresh:'Päivitä', updated:'Päivitetty',
+ justNow:'juuri nyt', minsAgo:m=>`${m} min sitten`,
+ bandDay:'PÄIVÄ', bandCivil:'SIVIILI', bandNaut:'MERI', bandAstro:'TÄHTITIET.',
+ bandNight:'TÄYSI PIMEYS', moonAxis:'kuu',
+ tierCivil:'Vain siviilihämärä', tierNaut:'Merihämärä',
+ tierAstro:'Tähtitieteellinen pimeys', tierNight:'Täysi pimeys',
+ phases:['Uusikuu','Kasvava sirppi','Ensimmäinen neljännes','Kasvava kupera','Täysikuu','Vähenevä kupera','Viimeinen neljännes','Vähenevä sirppi'],
+ winSearch:'Etsitään parasta hetkeä…', winFound:(a,b)=>`Paras hetki  ${a} – ${b}`,
+ winNoDark:'Ei sopivaa hetkeä — ei tule tarpeeksi pimeää', winNoClear:'Ei sopivaa hetkeä — liikaa pilviä',
+ hNotTonight:'Ei tänä yönä', hProbablyNot:'Tuskin', hClouded:'Pilvistä',
+ hQuiet:'Rauhallinen taivas', hMoon:'Kuu haittaa', hGo:'Mene ulos', hLook:'Kannattaa vilkaista',
+ bNeverDark:(d,n)=>`Taivas ei mene siviilihämärää pimeämmäksi. Kunnolla pimeät yöt palaavat noin <strong>${d}</strong> — ${n} päivän päästä.`,
+ bNeverDarkPlain:'Taivas ei mene tällä hetkellä siviilihämärää pimeämmäksi.',
+ bNaut:'Korkeintaan merihämärää. Vain voimakas revontuli näkyisi, ja pohjoinen taivaanranta pysyy vaaleana.',
+ bClouded:c=>`Riittävän pimeää, mutta pilvisyys ${c}% yön aikana. Sen läpi ei näy mitään.`,
+ bQuiet:k=>`Riittävän pimeää, mutta Kp ${k} Oulun yllä. Vilkaisun arvoista, ei retken.`,
+ bMoon:(i,a)=>`Kuu ${i}% valaistuna ja ${a}° horisontin yläpuolella pimeimmällä hetkellä. Vain kirkas revontuli voittaa sen.`,
+ bGo:(k,c,d)=>`Kp ${k}, ${c}, ${d}. Siirry pois katuvalojen luota.`,
+ bLook:(d,c,k)=>`${d}, ${c}, Kp ${k}. Tarkkaile pohjoista taivaanrantaa.`,
+ clear:'selkeää', cloudPct:c=>`pilvisyys ${c}%`, cloudUnknown:'pilvisyys tuntematon', kpUnknown:'tuntematon',
+ nDarkNote:(n,t)=>`${n}. Matalimmillaan klo ${t}.`,
+ nCloudNote:'Keskiarvo tulevilta pimeiltä tunneilta.', nCloudNone:'Ei pimeitä tunteja jaksolla.',
+ nMoonUp:(p,a,s)=>`${p}, ${a}° korkeudella pimeimmällä hetkellä. ${s}`,
+ nMoonDown:p=>`${p}, horisontin alapuolella pimeimmällä hetkellä. Ei häiritse.`,
+ moonWash:'Häivyttää heikot revontulet.', moonGlare:'Hieman häikäisyä.',
+ kpStorm:'Myrskytaso.', kpActive:'Aktiivinen.', kpLow:'Vain pohjoinen taivaanranta.', kpQuiet:'Hyvin rauhallista.',
+ bzLine:(v,d)=>`Bz ${v} nT ${d}. `, bzSouthGood:'etelään — edullinen', bzSouth:'etelään — hieman edullinen', bzNorth:'pohjoiseen — epäedullinen',
+ sTooLight:'Liian valoisa', sClouded:'Pilvistä', sMoonlit:'Kuutamo', sPromising:'Lupaava', sPossible:'Mahdollista',
+ bSun:'aurinko', bCloud:'pilvet', bMoonUp:'ylhäällä', bMoonDown:'alhaalla',
+ fSunMoon:'Aurinko ja kuu', fSunMoonD:'laskettu paikallisesti, ei verkkoyhteyttä',
+ fWeather:'Sää · Open-Meteo', fWeatherD:'pilvisyys, lämpötila, auringon ajat',
+ fSpace:'Avaruussää', fSpaceOk:'NOAA oman funktion kautta',
+ fBlocked:'estetty tai ei yhteyttä', fNoFn:'funktiota ei tavoiteta — toimii vain julkaistulla sivustolla',
+ fPartial:'osittainen', unavailable:'Ei saatavilla.',
+ tipService:'Selain toimii — toinen lähde latautui samalta sivulta, joten vika on palvelussa. Pimeys ja kuu lasketaan paikallisesti ja pysyvät tarkkoina.',
+ tipAll:'Kaikki verkkolähteet epäonnistuivat. Jos avasit tiedoston levyltä, funktiota ei ole olemassa — käytä julkaistua sivustoa.',
+ season:'Revontulikausi Oulussa', seasonCap:'Jokainen palkki on yksi yö, ja sen korkeus kertoo montako tuntia aurinko on alle −12°. Kun palkit katoavat, revontulet ovat mahdottomia — se on Oulun kesä, ei huono tuuri.',
+ darkHrs:'h pimeää', seasonNone:'ei pimeitä öitä',
+ camera:'Kamera-asetukset', camIso:'ISO', camShutter:'Valotusaika', camAperture:'Aukko',
+ camFocus:'Tarkennus', camPhone:'Puhelin',
+ camFocusV:'Manuaalinen, äärettömään — automaattitarkennus hakee pimeässä',
+ camPhoneV:'Yötila ja tukeva alusta. 10–30 sekuntia. Salama pois.',
+ camNote:'Lähtökohta, joka perustuu yön aktiivisuuteen ja kuunvaloon. Ota yksi kuva, katso se, säädä. Jalusta on tärkeämpi kuin mikään näistä luvuista.',
+ camFaint:'Heikot revontulet liikkuvat hitaasti, joten valotusaika voi olla pitkä.',
+ camBright:'Kirkkaat revontulet liikkuvat nopeasti — pidä valotusaika lyhyenä tai rakenne suttaantuu.',
+ camMoon:'Kuunvalo tekee osan työstä, joten laske ISO alemmas.',
+ ask:'Selitä', localLbl:(st,km)=>`${st}, ${km} km päässä · viimeiset 90 min`,
+ kpRef:k=>`Globaali Kp ${k}`,
+ attribution:'Magnetometridata: Ilmatieteen laitos, CC BY 4.0. Kynnysarvot alustavia.',
+ qDark:'Kuinka syvälle aurinko laskee horisontin alle tänä yönä. Revontulet vaativat alle −12°, ja alle −18° on vielä parempi. Tämä on pelkkää tähtitiedettä, laskettu selaimessasi, eikä mikään ennuste muuta sitä.',
+ qCloud:'Pilvisyyden keskiarvo tulevilta pimeiltä tunneilta. Revontulet syntyvät noin 100 km korkeudella, joten paksu pilvi peittää ne kokonaan — sen yläpuolisella aktiivisuudella ei ole väliä. Alle 40% on käyttökelpoinen.',
+ qMoon:'Kuinka suuri osa kuusta on valaistuna ja onko kuu horisontin yläpuolella pimeimmällä hetkellä. Korkealla oleva täysikuu hukuttaa heikot revontulet yhtä tehokkaasti kuin pilvet. Horisontin alapuolella sen vaiheella ei ole mitään merkitystä.',
+ qKp:'Pääluku on Oulua lähimmän Ilmatieteen laitoksen aseman magneettinen häiriö — vaakakomponentin suurin heilahdus viimeisen 90 minuutin aikana, nanotesloina. Sadan kilometrin päässä oleva magnetometri kertoo enemmän kuin globaali Kp-indeksi, joka on kolmen tunnin planeetanlaajuinen keskiarvo. Kp näkyy vertailun vuoksi. Kynnysarvot ovat alustavia ja tarkentuvat talven mittaan, kun niitä verrataan öihin joina revontulia todella näkyy.',
+ rain:'Sade tänä yönä', rainNone:'ei sadetta', bRain:'sade',
+ fMag:'Magnetometri · Ilmatieteen laitos', fKp:'Planetaarinen Kp · NOAA SWPC', fWind:'Aurinkotuuli · NOAA SWPC',
+ bzSouthStrong:'etelään — erittäin edullinen',
+ kpScale:[
+  {h:'Paikallinen häiriö · viimeiset 90 min',r:[['alle 100 nT','rauhallista; tavallista yövaihtelua'],
+   ['100–250 nT','jotain liikkuu; katso pohjoiseen'],['250–500 nT','aktiivista; hyvä mahdollisuus zeniitissä'],
+   ['yli 500 nT','myrsky']]},
+  {h:'Globaali Kp · planetaarinen, kolmen tunnin',r:[['alle 2','liian rauhallista Oululle'],
+   ['2–3','vain pohjoinen taivaanranta'],['4–5','voi ulottua zeniittiin'],['yli 5','geomagneettinen myrsky']]},
+  {h:'Bz · aurinkotuulen kentän suunta',r:[['yli 0','osoittaa pohjoiseen; epäedullinen'],
+   ['0…−5','hieman edullinen'],['−5…−10','edullinen'],['alle −10','erittäin edullinen']]}],
+ disclaimer:'Ennusteet ovat arvioita, eivät lupauksia. Paikalliset kynnysarvot ovat alustavia ja tarkentuvat kauden 2026–27 aikana.',
+ privacy:'Yksityisyys',
+ privacyText:'Ei evästeitä, ei analytiikkaa, ei minkäänlaista seurantaa. Kieli- ja yötilavalintasi säilyvät omalla laitteellasi eikä niitä lähetetä minnekään.\n\nMukana on kolme ulkopuolista palvelua. Avaruussää- ja magnetometritiedot hakee tämän sivuston oma palvelin, joten NOAA ja Ilmatieteen laitos eivät saa sinusta mitään tietoa. Säätiedot selaimesi hakee suoraan Open-Meteosta, ja kirjasimet latautuvat Google Fontsista — molemmat näkevät siis IP-osoitteesi, kuten mikä tahansa verkkopyyntö. Muuta ei laitteeltasi lähde.',
+ spotSource:'Paikat perustuvat Visit Oulun julkaisemiin ohjeisiin.',
+ tipsTitle:"Ennen kuin lähdet", dirLabel:"Reittiohjeet",
+ tips:[{h:"Ole kärsivällinen",p:"Revontulet tulevat purskeina. Hyvä yö on usein tunti tyhjää ja sitten kaksikymmentä minuuttia kaikkea. Varaudu jäämään, älä käymään."},{h:"Anna silmien tottua",p:"Kaksikymmentä minuuttia pimeässä tekee valtavan eron, ja yksi vilkaisu puhelimeen pilaa sen. Käytä tämän sivun punaista yötilaa."},{h:"Katso pohjoiseen ja matalalle",p:"Oulusta useimmat revontulet alkavat heikkona kaarena pohjoisella taivaanrannalla. Vain voimakas aktiivisuus nousee pään päälle."},{h:"Näyttää harmaalta, ei vihreältä",p:"Heikot revontulet näkyvät paljaalle silmälle vaaleanharmaana usvana. Kamera näkee värin paljon ennen sinua — ota koekuva suurella ISO:lla ja tarkista onko tuo pilvi sittenkin revontuli."},{h:"Siirry pois katuvalojen luota",p:"Muutama sata metriäkin auttaa. Käännä selkä autojen valoille ja anna taivaan olla kirkkain asia näkyvissä."},{h:"Pukeudu paikallaan seisomiseen",p:"Et tule kävelemään. Lisää yksi kerros järkevältä tuntuvan päälle ja ota jotain, jonka päällä istua."}],
+ skyTitle:"Minne katsoa", skyCap:"Näkymä pohjoiseen. Vyöhyke näyttää suunnilleen kuinka korkealla revontulet todennäköisesti ovat tänä yönä — matalalla horisontissa kun aktiivisuus on vähäistä, pään päällä kun se on voimakasta. Puut ja rakennukset peittävät juuri sen matalan osan, jossa heikot revontulet ovat, ja siksi avoin pohjoinen horisontti on tärkeä.", skyBand:"todennäköiset revontulet", skyTooLight:"Ei tarpeeksi pimeää tänä yönä", skyFacing:"kohti pohjoista",
+ cN:"P", cNE:"KO", cNW:"LU", cW:"L", cE:"I",
+ hGoNow:'Mene ulos nyt', hCloudWay:'Pilvet haittaavat', eyebrowStorm:'Geomagneettinen myrsky',
+ bNautQuiet:k=>`Korkeintaan merihämärää, ja vain ${k} Oulun yllä. Ei mitään nähtävää eikä tarpeeksi pimeää sen näkemiseen.`,
+ bGoNow:(a,c,d)=>`${a} Oulun yllä — tämä on harvinaista. ${c}, ${d}, ja pään päällä eikä horisontissa.`,
+ bCloudWay:(a,c)=>`${a} pilvien yläpuolella, mutta ${c}. Kannattaa vahtia aukkoja.`,
+ bestFrom:x=>` Parhaiten klo ${x} alkaen.`,
+ spotList:[
+  {n:"Nallikari",d:"3,3 km luoteeseen",t:"Hiekkaranta avomeren äärellä. Katso pohjoiseen veden yli — laajin esteetön pohjoinen taivaanranta lähellä keskustaa, majakka siluettina."},
+  {n:"Hollihaka",d:"keskustassa",t:"Puisto aivan keskustassa, veden äärellä. Kaupungin valot haittaavat, mutta kävellen helpoin vaihtoehto jos revontulet ovat jo käynnissä."},
+  {n:"Kuivasjärvi",d:"6 km pohjoiseen",t:"Järvenranta yliopiston lähellä. Avointa vettä pohjoiseen ja pimeämpää kuin keskustassa — eteläranta antaa selkeimmän näkymän järven yli."},
+  {n:"Pyykösjärvi",d:"4,5 km koilliseen",t:"Yliopiston toinen järvi. Samanlainen näkymä, yleensä rauhallisempi kuin Kuivasjärvi."}],
+ glossary:[
+  {t:'Kp-indeksi', p:'Maailmanlaajuisen geomagneettisen aktiivisuuden asteikko 0–9. Oulu on niin pohjoisessa, että jo Kp 2 tuo revontulet pohjoiselle taivaanrannalle, ja Kp 4 tai enemmän voi tuoda ne suoraan pään päälle. Alle Kp 2 ei kannata palella.'},
+  {t:'Bz', p:'Auringosta saapuvan magneettikentän suunta nanotesloina. Kun se osoittaa etelään — negatiivinen luku — Maan magneettikenttä avautuu ja revontulet käyvät paljon todennäköisemmiksi. Bz ennakoi paremmin kuin Kp, joka kuvaa jo tapahtunutta.'},
+  {t:'Siviili-, meri- ja tähtitieteellinen hämärä', p:'Kuinka syvällä aurinko on horisontin alapuolella: 6°, 12° ja 18°. Revontulet vaativat vähintään −12°. Oulun kesässä aurinko ei laske näin alas, minkä vuoksi mitään ei näy suunnilleen huhtikuun lopusta elokuun puoliväliin.'},
+  {t:'Kuu', p:'Kirkas kuu häivyttää heikot revontulet yhtä tehokkaasti kuin pilvet. Korkealla oleva täysikuu voi peittää kaiken paitsi voimakkaan revontulen. Katso sekä kuinka täysi kuu on että onko se lainkaan horisontin yläpuolella.'},
+  {t:'Kausi', p:'Ilmatieteen laitoksen mukaan revontulia näkyy Oulussa noin 25% öistä — aina kun on pimeää ja selkeää. Kausi kestää suunnilleen syyskuusta huhtikuuhun.'}]
+},
+es:{ locale:'es-ES',
+ eyebrow:'Auroras esta noche', checking:'Comprobando…', working:'Calculando cuánto oscurece.',
+ chartTitle:'Cuánto se oscurece la noche',
+ caption:'La línea rosa es el sol a lo largo de la noche. Las auroras necesitan que baje de los −12°, y cuanto más oscura la franja, mejor. La columna resaltada es la mejor ventana de esta noche; la banda inferior indica cuándo la luna está sobre el horizonte.',
+ gDark:'Oscuridad', gCloud:'Nubes', gMoon:'Luna', gKp:'Probabilidad',
+ outlook:'Próximas tres noches', tonight:'Esta noche', spots:'Dónde ir',
+ safety:'Ten cuidado cerca del agua y no camines nunca sobre el hielo del mar o de un lago si no estás seguro de que aguanta. Abrígate para estar quieto: ver auroras es un trabajo frío.',
+ sunrise:'Amanecer', sunset:'Ocaso', daylen:'Duración del día',
+ week:'Cambio esta semana', temp:'Temperatura',
+ gloss:'Qué significan los números', status:'Estado', refresh:'Actualizar', updated:'Actualizado',
+ justNow:'ahora mismo', minsAgo:m=>`hace ${m} min`,
+ bandDay:'DÍA', bandCivil:'CIVIL', bandNaut:'NÁUTICO', bandAstro:'ASTRONÓMICO',
+ bandNight:'NOCHE CERRADA', moonAxis:'luna',
+ tierCivil:'Solo crepúsculo civil', tierNaut:'Crepúsculo náutico',
+ tierAstro:'Oscuridad astronómica', tierNight:'Noche cerrada',
+ phases:['Luna nueva','Creciente','Cuarto creciente','Gibosa creciente','Luna llena','Gibosa menguante','Cuarto menguante','Menguante'],
+ winSearch:'Buscando la mejor ventana…', winFound:(a,b)=>`Mejor ventana  ${a} – ${b}`,
+ winNoDark:'Sin ventana esta noche — nunca oscurece lo suficiente',
+ winNoClear:'Sin ventana esta noche — demasiadas nubes',
+ hNotTonight:'Esta noche no', hProbablyNot:'Poco probable', hClouded:'Cubierto',
+ hQuiet:'Cielo tranquilo', hMoon:'La luna estorba', hGo:'Sal fuera', hLook:'Merece un vistazo',
+ bNeverDark:(d,n)=>`El cielo no pasa del crepúsculo civil. Las noches realmente oscuras vuelven hacia el <strong>${d}</strong> — dentro de ${n} días.`,
+ bNeverDarkPlain:'Ahora mismo el cielo no pasa del crepúsculo civil.',
+ bNaut:'Crepúsculo náutico como mucho. Solo una aurora intensa se vería, y el horizonte norte queda deslavado.',
+ bClouded:c=>`Oscurece lo suficiente, pero hay un ${c}% de nubes durante la noche. Por ahí no pasa nada.`,
+ bQuiet:k=>`Oscurece lo suficiente, pero Kp ${k} sobre Oulu. Merece una mirada al norte, no una salida.`,
+ bMoon:(i,a)=>`Luna al ${i}% y a ${a}° sobre el horizonte en el momento más oscuro. Solo una aurora brillante la superará.`,
+ bGo:(k,c,d)=>`Kp ${k}, ${c}, ${d}. Aléjate de las farolas.`,
+ bLook:(d,c,k)=>`${d}, ${c}, Kp ${k}. Vigila el horizonte norte.`,
+ clear:'despejado', cloudPct:c=>`${c}% de nubes`, cloudUnknown:'nubes desconocidas', kpUnknown:'desconocido',
+ nDarkNote:(n,t)=>`${n}. Mínimo a las ${t}.`,
+ nCloudNote:'Media de las horas oscuras que vienen.', nCloudNone:'No hay horas oscuras en el rango.',
+ nMoonUp:(p,a,s)=>`${p}, a ${a}° en el momento más oscuro. ${s}`,
+ nMoonDown:p=>`${p}, bajo el horizonte en el momento más oscuro. Sin interferencia.`,
+ moonWash:'Borra las auroras tenues.', moonGlare:'Algo de resplandor.',
+ kpStorm:'Nivel de tormenta.', kpActive:'Activo.', kpLow:'Solo horizonte norte.', kpQuiet:'Muy tranquilo.',
+ bzLine:(v,d)=>`Bz ${v} nT ${d}. `, bzSouthGood:'sur — favorable', bzSouth:'sur — algo favorable', bzNorth:'norte — desfavorable',
+ sTooLight:'Demasiada luz', sClouded:'Nublado', sMoonlit:'Con luna', sPromising:'Prometedor', sPossible:'Posible',
+ bSun:'sol', bCloud:'nubes', bMoonUp:'arriba', bMoonDown:'abajo',
+ fSunMoon:'Sol y luna', fSunMoonD:'calculado en local, sin red',
+ fWeather:'Meteorología · Open-Meteo', fWeatherD:'nubes, temperatura, horas de sol',
+ fSpace:'Clima espacial', fSpaceOk:'NOAA vía tu función',
+ fBlocked:'bloqueado o sin conexión', fNoFn:'función no accesible — solo en el sitio publicado',
+ fPartial:'parcial', unavailable:'No disponible.',
+ tipService:'El navegador está bien: otra fuente ha cargado en esta misma página, así que el problema es del servicio. La oscuridad y la luna se calculan en local y siguen siendo exactas.',
+ tipAll:'Han fallado todas las fuentes de red. Si has abierto el archivo desde el disco, la función no existe — usa el sitio publicado.',
+ season:'Temporada de auroras en Oulu', seasonCap:'Cada barra es una noche, y su altura son las horas que el sol pasa por debajo de −12°. Donde las barras desaparecen, las auroras son sencillamente imposibles: eso es el verano de Oulu, no mala suerte.',
+ darkHrs:'h de oscuridad', seasonNone:'sin noches oscuras',
+ camera:'Ajustes de cámara', camIso:'ISO', camShutter:'Obturación', camAperture:'Diafragma',
+ camFocus:'Enfoque', camPhone:'Móvil',
+ camFocusV:'Manual, al infinito — el autofoco no encuentra nada a oscuras',
+ camPhoneV:'Modo noche y apoyado en algo firme. 10–30 segundos. Sin flash.',
+ camNote:'Un punto de partida calculado con la actividad de esta noche y la luz de la luna. Haz una foto, mírala y ajusta. El trípode importa más que cualquiera de estos números.',
+ camFaint:'Las auroras tenues se mueven despacio, así que puedes alargar la exposición.',
+ camBright:'Las auroras intensas se mueven rápido: exposición corta o la estructura se emborrona.',
+ camMoon:'La luna aporta luz, así que baja el ISO.',
+ ask:'Explicar', localLbl:(st,km)=>`${st}, a ${km} km · últimos 90 min`,
+ kpRef:k=>`Kp global ${k}`,
+ attribution:'Datos de magnetómetro: Instituto Meteorológico de Finlandia, CC BY 4.0. Umbrales provisionales.',
+ qDark:'Cuánto baja el sol por debajo del horizonte esta noche. Las auroras necesitan menos de −12°, y menos de −18° es aún mejor. Esto es astronomía pura, calculada en tu navegador, y es lo único que ningún pronóstico puede cambiar.',
+ qCloud:'Nubosidad media durante las horas oscuras que vienen. Las auroras ocurren a unos 100 km de altura, así que una nube espesa las tapa por completo, por muy activo que esté el cielo por encima. Menos del 40% es trabajable.',
+ qMoon:'Qué parte de la luna está iluminada y si está sobre el horizonte cuando el cielo está más oscuro. Una luna llena alta ahoga las auroras tenues igual que las nubes. Bajo el horizonte, su fase da exactamente igual.',
+ qKp:'La cifra principal es la perturbación magnética en la estación del Instituto Meteorológico de Finlandia más cercana a Oulu: la mayor oscilación del campo horizontal en los últimos 90 minutos, en nanoteslas. Un magnetómetro a 100 km dice más que el índice Kp global, que es una media planetaria de tres horas. El Kp se muestra al lado como referencia. Los umbrales son provisionales y se ajustarán durante el invierno comparándolos con las noches en que realmente aparecen auroras.',
+ rain:'Lluvia esta noche', rainNone:'sin lluvia', bRain:'lluvia',
+ fMag:'Magnetómetro · IM de Finlandia', fKp:'Kp planetario · NOAA SWPC', fWind:'Viento solar · NOAA SWPC',
+ bzSouthStrong:'sur — muy favorable',
+ kpScale:[
+  {h:'Perturbación local · últimos 90 min',r:[['menos de 100 nT','tranquilo; variación nocturna normal'],
+   ['100–250 nT','algo se mueve; mira al norte'],['250–500 nT','activo; buenas opciones en el cenit'],
+   ['más de 500 nT','tormenta']]},
+  {h:'Kp global · planetario, tres horas',r:[['menos de 2','demasiado tranquilo para Oulu'],
+   ['2–3','solo horizonte norte'],['4–5','puede llegar al cenit'],['más de 5','tormenta geomagnética']]},
+  {h:'Bz · dirección del campo del viento solar',r:[['por encima de 0','apunta al norte; desfavorable'],
+   ['0 a −5','algo favorable'],['−5 a −10','favorable'],['por debajo de −10','muy favorable']]}],
+ disclaimer:'Las previsiones son estimaciones, no promesas. Los umbrales locales son provisionales y se están calibrando durante la temporada 2026–27.',
+ privacy:'Privacidad',
+ privacyText:'Sin cookies, sin analítica, sin seguimiento de ningún tipo. Tus preferencias de idioma y modo nocturno se guardan en tu propio dispositivo y no se envían a ninguna parte.\n\nIntervienen tres servicios externos. Los datos de clima espacial y magnetómetro los obtiene el servidor de este sitio, así que NOAA y el Instituto Meteorológico de Finlandia no saben nada de ti. Los datos meteorológicos los pide tu navegador directamente a Open-Meteo, y las tipografías se cargan desde Google Fonts: ambos ven por tanto tu dirección IP, como en cualquier petición web. Nada más sale de tu dispositivo.',
+ spotSource:'Ubicaciones basadas en las recomendaciones publicadas por Visit Oulu.',
+ tipsTitle:"Antes de salir", dirLabel:"Cómo llegar",
+ tips:[{h:"Ten paciencia",p:"Las auroras llegan a ráfagas. Una buena noche suele ser una hora de nada seguida de veinte minutos de todo. Prepárate para quedarte, no para asomarte."},{h:"Deja que los ojos se adapten",p:"Veinte minutos a oscuras marcan una diferencia enorme, y una mirada a la pantalla del móvil lo echa a perder. Usa el modo nocturno rojo de esta página."},{h:"Mira al norte, y mira bajo",p:"Desde Oulu la mayoría de auroras empiezan como un arco tenue en el horizonte norte. Solo la actividad fuerte sube al cenit."},{h:"Se ve gris, no verde",p:"Las auroras tenues se ven a simple vista como una neblina gris pálido. La cámara capta el color mucho antes que tú: haz una foto de prueba con ISO alto para saber si esa nube es en realidad una aurora."},{h:"Aléjate de las farolas",p:"Unos cientos de metros ya ayudan. Da la espalda a los faros de los coches y deja que el cielo sea lo más brillante que veas."},{h:"Vístete para estar quieto",p:"No vas a caminar. Añade una capa más de la que parece sensata y lleva algo sobre lo que sentarte."}],
+ skyTitle:"Dónde mirar", skyCap:"Tu vista mirando al norte. La banda indica aproximadamente a qué altura son probables las auroras esta noche: bajas en el horizonte cuando la actividad es tranquila, en el cenit cuando es fuerte. Los árboles y los edificios tapan justo la parte baja donde se sitúan las auroras tenues, y por eso importa un horizonte norte despejado.", skyBand:"aurora probable", skyTooLight:"No oscurece lo suficiente esta noche", skyFacing:"mirando al norte",
+ cN:"N", cNE:"NE", cNW:"NO", cW:"O", cE:"E",
+ hGoNow:'Sal ahora', hCloudWay:'Las nubes estorban', eyebrowStorm:'Tormenta geomagnética',
+ bNautQuiet:k=>`Crepúsculo náutico como mucho, y solo ${k} sobre Oulu. Nada que ver, y no oscurece lo suficiente para verlo.`,
+ bGoNow:(a,c,d)=>`${a} sobre Oulu: esto es raro. ${c}, ${d}, y en el cenit en vez de en el horizonte.`,
+ bCloudWay:(a,c)=>`${a} por encima de las nubes, pero ${c}. Vigila los claros.`,
+ bestFrom:x=>` Mejor a partir de las ${x}.`,
+ spotList:[
+  {n:"Nallikari",d:"3,3 km al noroeste",t:"Playa de arena frente al mar abierto. Mira al norte sobre el agua: el horizonte norte más despejado cerca de la ciudad, con el faro recortado al fondo."},
+  {n:"Hollihaka",d:"en el centro",t:"Un parque en pleno centro, junto al agua. Hay contaminación lumínica, pero es la opción más fácil a pie si la aurora ya ha empezado."},
+  {n:"Kuivasjärvi",d:"6 km al norte",t:"Orilla del lago junto a la universidad. Agua abierta al norte y más oscuro que el centro; la orilla sur da la vista más limpia sobre el lago."},
+  {n:"Pyykösjärvi",d:"4,5 km al noreste",t:"El otro lago universitario. Vista parecida y normalmente más tranquilo que Kuivasjärvi."}],
+ glossary:[
+  {t:'Índice Kp', p:'Escala de 0 a 9 de la actividad geomagnética global. Oulu está tan al norte que con Kp 2 ya aparecen auroras en el horizonte norte, y con Kp 4 o más pueden llegar al cenit. Por debajo de Kp 2 no merece la pena pasar frío.'},
+  {t:'Bz', p:'La dirección del campo magnético que llega del sol, en nanoteslas. Cuando apunta al sur — número negativo — el campo terrestre se abre y la aurora se vuelve mucho más probable. Bz avisa antes que el Kp, que describe lo que ya ha pasado.'},
+  {t:'Crepúsculo civil, náutico y astronómico', p:'Cuánto ha bajado el sol por debajo del horizonte: 6°, 12° y 18°. La aurora necesita al menos −12°. En verano el sol nunca baja tanto en Oulu, y por eso no se ve nada entre finales de abril y mediados de agosto.'},
+  {t:'La luna', p:'Una luna brillante borra las auroras tenues igual de bien que las nubes. Una luna llena alta puede tapar todo salvo una aurora intensa. Mira tanto cuán llena está como si realmente está sobre el horizonte.'},
+  {t:'La temporada', p:'Según el Instituto Meteorológico de Finlandia, en Oulu hay auroras visibles en torno al 25% de las noches, siempre que esté oscuro y despejado. La temporada va aproximadamente de septiembre a abril.'}]
+},
+de:{ locale:'de-DE',
+ eyebrow:'Nordlicht heute Nacht', checking:'Wird geprüft…', working:'Berechne, wie dunkel es wird.',
+ chartTitle:'Wie tief die Nacht wird',
+ caption:'Die rosa Linie ist die Sonne im Laufe der Nacht. Nordlichter brauchen sie unter der −12°-Linie, und je dunkler das Band, desto besser. Die hervorgehobene Spalte ist das beste Zeitfenster; der Streifen darunter zeigt, wann der Mond über dem Horizont steht.',
+ gDark:'Dunkelheit', gCloud:'Wolken', gMoon:'Mond', gKp:'Wahrscheinlichkeit',
+ outlook:'Die nächsten drei Nächte', tonight:'Heute Nacht', spots:'Wohin',
+ safety:'Vorsicht in Gewässernähe, und geh niemals auf Meer- oder Seeeis, wenn du nicht sicher bist, dass es trägt. Zieh dich zum Stillstehen an — Nordlichter schauen ist kalte Arbeit.',
+ sunrise:'Sonnenaufgang', sunset:'Sonnenuntergang', daylen:'Tageslänge',
+ week:'Änderung diese Woche', temp:'Temperatur', rain:'Regen heute Nacht', rainNone:'kein Regen',
+ gloss:'Was die Zahlen bedeuten', status:'Status', refresh:'Aktualisieren', updated:'Aktualisiert',
+ justNow:'gerade eben', minsAgo:m=>`vor ${m} Min.`,
+ bandDay:'TAG', bandCivil:'BÜRGERLICH', bandNaut:'NAUTISCH', bandAstro:'ASTRONOMISCH',
+ bandNight:'VOLLE NACHT', moonAxis:'Mond',
+ tierCivil:'Nur bürgerliche Dämmerung', tierNaut:'Nautische Dämmerung',
+ tierAstro:'Astronomisch dunkel', tierNight:'Volle Nacht',
+ phases:['Neumond','Zunehmende Sichel','Erstes Viertel','Zunehmender Mond','Vollmond','Abnehmender Mond','Letztes Viertel','Abnehmende Sichel'],
+ winSearch:'Suche das beste Zeitfenster…', winFound:(a,b)=>`Bestes Zeitfenster  ${a} – ${b}`,
+ winNoDark:'Kein Zeitfenster heute — es wird nie dunkel genug',
+ winNoClear:'Kein Zeitfenster heute — zu viele Wolken',
+ hNotTonight:'Heute Nacht nicht', hProbablyNot:'Eher nicht', hClouded:'Bedeckt',
+ hQuiet:'Ruhiger Himmel', hMoon:'Der Mond stört', hGo:'Geh raus', hLook:'Ein Blick lohnt sich',
+ bNeverDark:(d,n)=>`Der Himmel wird nicht dunkler als die bürgerliche Dämmerung. Richtig dunkle Nächte kommen um den <strong>${d}</strong> zurück — in ${n} Tagen.`,
+ bNeverDarkPlain:'Der Himmel wird derzeit nicht dunkler als die bürgerliche Dämmerung.',
+ bNaut:'Höchstens nautische Dämmerung. Nur ein starkes Nordlicht käme durch, und der nördliche Horizont bleibt aufgehellt.',
+ bClouded:c=>`Dunkel genug, aber ${c}% Wolken über Nacht. Da kommt nichts durch.`,
+ bQuiet:k=>`Dunkel genug, aber ${k} über Oulu. Ein Blick nach Norden lohnt, ein Ausflug nicht.`,
+ bMoon:(i,a)=>`Mond zu ${i}% beleuchtet und ${a}° über dem Horizont im dunkelsten Moment. Nur ein helles Nordlicht schlägt ihn.`,
+ bGo:(k,c,d)=>`${k}, ${c}, ${d}. Weg von den Straßenlaternen.`,
+ bLook:(d,c,k)=>`${d}, ${c}, ${k}. Beobachte den nördlichen Horizont.`,
+ clear:'klar', cloudPct:c=>`${c}% Wolken`, cloudUnknown:'Wolken unbekannt', kpUnknown:'unbekannt',
+ nDarkNote:(n,t)=>`${n}. Tiefstand ${t}.`,
+ nCloudNote:'Mittel über die kommenden dunklen Stunden.', nCloudNone:'Keine dunklen Stunden im Zeitraum.',
+ nMoonUp:(p,a,s)=>`${p}, ${a}° hoch im dunkelsten Moment. ${s}`,
+ nMoonDown:p=>`${p}, unter dem Horizont im dunkelsten Moment. Keine Störung.`,
+ moonWash:'Überstrahlt schwache Nordlichter.', moonGlare:'Etwas Streulicht.',
+ kpStorm:'Sturmniveau.', kpActive:'Aktiv.', kpLow:'Nur nördlicher Horizont.', kpQuiet:'Sehr ruhig.',
+ bzLine:(v,d)=>`Bz ${v} nT ${d}. `, bzSouthGood:'südwärts — günstig', bzSouth:'südwärts — leicht günstig', bzNorth:'nordwärts — ungünstig',
+ sTooLight:'Zu hell', sClouded:'Bedeckt', sMoonlit:'Mondhell', sPromising:'Vielversprechend', sPossible:'Möglich',
+ bSun:'Sonne', bCloud:'Wolken', bRain:'Regen', bMoonUp:'oben', bMoonDown:'unten',
+ fSunMoon:'Sonne und Mond', fSunMoonD:'im Browser berechnet, kein Netz nötig',
+ fWeather:'Wetter · Open-Meteo', fWeatherD:'Wolken, Regen, Temperatur, Sonnenzeiten',
+ fMag:'Magnetometer · Ilmatieteen laitos', fKp:'Planetarisches Kp · NOAA SWPC', fWind:'Sonnenwind · NOAA SWPC',
+ fSpace:'Weltraumwetter', fSpaceOk:'NOAA über deine Funktion',
+ fBlocked:'blockiert oder offline', fNoFn:'Funktion nicht erreichbar — nur auf der veröffentlichten Seite',
+ fPartial:'teilweise', unavailable:'Nicht verfügbar.',
+ tipService:'Der Browser ist in Ordnung — eine andere Quelle hat auf derselben Seite geladen. Das liegt am Dienst selbst. Dunkelheit und Mond werden lokal berechnet und bleiben korrekt.',
+ tipAll:'Alle Netzquellen sind fehlgeschlagen. Wenn du die Datei von der Festplatte geöffnet hast, existiert die Funktion nicht — nutze die veröffentlichte Seite.',
+ ask:'Erklären', localLbl:(st,km)=>`${st}, ${km} km entfernt · letzte 90 Min.`,
+ kpRef:k=>`Globales Kp ${k}`,
+ attribution:'Magnetometerdaten: Ilmatieteen laitos, CC BY 4.0. Schwellenwerte vorläufig.',
+ qDark:'Wie tief die Sonne heute Nacht unter den Horizont sinkt. Nordlichter brauchen unter −12°, unter −18° ist besser. Das ist reine Astronomie, hier im Browser berechnet, und das Einzige, was keine Vorhersage ändern kann.',
+ qCloud:'Mittlere Wolkendecke über die kommenden dunklen Stunden. Nordlichter entstehen etwa 100 km hoch, dichte Wolken verdecken sie also vollständig — wie aktiv der Himmel darüber ist, spielt keine Rolle. Unter 40% ist brauchbar.',
+ qMoon:'Wie viel vom Mond beleuchtet ist und ob er über dem Horizont steht, wenn der Himmel am dunkelsten ist. Ein hoher Vollmond überstrahlt schwache Nordlichter so wirksam wie Wolken. Unter dem Horizont ist seine Phase völlig belanglos.',
+ qKp:'Die Hauptzahl ist die magnetische Störung an der Oulu nächstgelegenen Station des finnischen Wetterdienstes — die größte Schwankung des Horizontalfeldes in den letzten 90 Minuten, in Nanotesla. Ein Magnetometer 100 km entfernt sagt mehr als der globale Kp-Index, ein dreistündiger planetarer Mittelwert. Kp steht zum Vergleich daneben. Die Schwellenwerte sind vorläufig und werden im Winter anhand von Nächten mit tatsächlichen Nordlichtern nachgezogen.',
+ bzSouthStrong:'südwärts — sehr günstig',
+ kpScale:[
+  {h:'Lokale Störung · letzte 90 Min.',r:[['unter 100 nT','ruhig; normale nächtliche Schwankung'],
+   ['100–250 nT','es regt sich; nach Norden schauen'],['250–500 nT','aktiv; gute Chance im Zenit'],
+   ['über 500 nT','Sturm']]},
+  {h:'Globales Kp · planetar, dreistündig',r:[['unter 2','zu ruhig für Oulu'],
+   ['2–3','nur nördlicher Horizont'],['4–5','kann den Zenit erreichen'],['über 5','geomagnetischer Sturm']]},
+  {h:'Bz · Richtung des Sonnenwindfelds',r:[['über 0','nach Norden; ungünstig'],
+   ['0 bis −5','leicht günstig'],['−5 bis −10','günstig'],['unter −10','sehr günstig']]}],
+ disclaimer:'Vorhersagen sind Schätzungen, keine Zusagen. Die lokalen Schwellenwerte sind vorläufig und werden über die Saison 2026–27 kalibriert.',
+ privacy:'Datenschutz',
+ privacyText:'Keine Cookies, keine Analytik, kein Tracking jeglicher Art. Deine Sprach- und Nachtmodus-Einstellungen bleiben auf deinem Gerät und werden nirgendwohin gesendet.\n\nDrei externe Dienste sind beteiligt. Weltraumwetter- und Magnetometerdaten holt der Server dieser Seite, NOAA und das finnische Meteorologische Institut erfahren also nichts über dich. Wetterdaten fragt dein Browser direkt bei Open-Meteo ab, und die Schriften laden von Google Fonts — beide sehen daher deine IP-Adresse, wie bei jeder Webanfrage. Sonst verlässt nichts dein Gerät.',
+ spotSource:'Orte nach den veröffentlichten Empfehlungen von Visit Oulu.',
+ tipsTitle:"Bevor du losgehst", dirLabel:"Route",
+ tips:[{h:"Sei geduldig",p:"Nordlichter kommen in Schüben. Eine gute Nacht ist oft eine Stunde nichts und dann zwanzig Minuten alles. Plane zu bleiben, nicht kurz nachzusehen."},{h:"Lass die Augen sich anpassen",p:"Zwanzig Minuten im Dunkeln machen einen riesigen Unterschied, und ein Blick aufs Handy macht alles zunichte. Nutze den roten Nachtmodus dieser Seite."},{h:"Schau nach Norden, und schau tief",p:"Von Oulu aus beginnen die meisten Nordlichter als schwacher Bogen am Nordhorizont. Nur starke Aktivität steigt in den Zenit."},{h:"Es sieht grau aus, nicht grün",p:"Schwache Nordlichter erscheinen dem bloßen Auge als blassgrauer Dunst. Die Kamera sieht die Farbe lange vor dir — mach eine Testaufnahme mit hohem ISO und finde heraus, ob diese Wolke doch ein Nordlicht ist."},{h:"Weg von den Straßenlaternen",p:"Schon ein paar hundert Meter helfen. Dreh Autoscheinwerfern den Rücken zu und lass den Himmel das Hellste im Blick sein."},{h:"Zieh dich zum Stillstehen an",p:"Du wirst nicht laufen. Zieh eine Schicht mehr an, als vernünftig scheint, und nimm etwas zum Sitzen mit."}],
+ skyTitle:"Wohin schauen", skyCap:"Dein Blick nach Norden. Das Band zeigt ungefähr, wie hoch am Himmel Nordlichter heute Nacht zu erwarten sind — tief am Horizont bei ruhiger Aktivität, im Zenit bei starker. Bäume und Gebäude verdecken genau den tiefen Bereich, in dem schwache Nordlichter stehen, und deshalb zählt ein freier Nordhorizont.", skyBand:"wahrscheinliches Nordlicht", skyTooLight:"Heute Nacht nicht dunkel genug", skyFacing:"nach Norden blickend",
+ cN:"N", cNE:"NO", cNW:"NW", cW:"W", cE:"O",
+ hGoNow:'Geh jetzt raus', hCloudWay:'Die Wolken stören', eyebrowStorm:'Geomagnetischer Sturm',
+ bNautQuiet:k=>`Höchstens nautische Dämmerung, und nur ${k} über Oulu. Nichts zu sehen, und nicht dunkel genug, um es zu sehen.`,
+ bGoNow:(a,c,d)=>`${a} über Oulu — das ist selten. ${c}, ${d}, und im Zenit statt am Horizont.`,
+ bCloudWay:(a,c)=>`${a} über den Wolken, aber ${c}. Auf Lücken achten.`,
+ bestFrom:x=>` Am besten ab ${x}.`,
+ spotList:[
+  {n:"Nallikari",d:"3,3 km nordwestlich",t:"Sandstrand am offenen Meer. Blick nach Norden über das Wasser — der weiteste freie Nordhorizont in Stadtnähe, mit dem Leuchtturm als Silhouette."},
+  {n:"Hollihaka",d:"im Zentrum",t:"Ein Park mitten in der Stadt, direkt am Wasser. Stadtlicht ist da, aber es ist die einfachste Option zu Fuß, wenn das Nordlicht schon läuft."},
+  {n:"Kuivasjärvi",d:"6 km nördlich",t:"Seeufer nahe der Universität. Offenes Wasser nach Norden und dunkler als die Innenstadt — das Südufer bietet den klarsten Blick über den See."},
+  {n:"Pyykösjärvi",d:"4,5 km nordöstlich",t:"Der andere Universitätssee. Ähnlicher Blick, meist ruhiger als Kuivasjärvi."}],
+ glossary:[
+  {t:'Kp-Index', p:'Eine Skala von 0 bis 9 für die weltweite geomagnetische Aktivität. Oulu liegt weit genug im Norden, dass schon Kp 2 Nordlichter an den Nordhorizont bringt, und Kp 4 oder mehr sie über den Kopf holen kann. Unter Kp 2 lohnt das Frieren nicht.'},
+  {t:'Bz', p:'Die Richtung des von der Sonne kommenden Magnetfelds, in Nanotesla. Zeigt es nach Süden — negative Zahl — öffnet sich das Erdmagnetfeld und Nordlichter werden viel wahrscheinlicher. Bz warnt früher als Kp, das Vergangenes beschreibt.'},
+  {t:'Bürgerlich, nautisch, astronomisch', p:'Wie tief die Sonne unter dem Horizont steht: 6°, 12° und 18°. Nordlichter brauchen mindestens −12°. Im Oulu-Sommer sinkt die Sonne nie so tief, weshalb von etwa Ende April bis Mitte August nichts zu sehen ist.'},
+  {t:'Der Mond', p:'Ein heller Mond überstrahlt schwache Nordlichter so wirksam wie Wolken. Ein hoher Vollmond kann alles außer einem starken Ausbruch verbergen. Prüfe beides: wie voll er ist und ob er überhaupt über dem Horizont steht.'},
+  {t:'Die Saison', p:'Das finnische Meteorologische Institut rechnet mit Nordlichtern in etwa 25% der Nächte in Oulu — immer wenn es dunkel und klar ist. Die Saison läuft etwa von September bis April.'}],
+ season:'Nordlichtsaison in Oulu',
+ seasonCap:'Jeder Balken ist eine Nacht, seine Höhe die Stundenzahl, in der die Sonne unter −12° steht. Wo die Balken verschwinden, sind Nordlichter unmöglich — das ist der Oulu-Sommer, kein Pech.',
+ darkHrs:'h dunkel', seasonNone:'keine dunklen Nächte',
+ camera:'Kamera-Einstellungen', camIso:'ISO', camShutter:'Belichtungszeit', camAperture:'Blende',
+ camFocus:'Fokus', camPhone:'Handy',
+ camFocusV:'Manuell auf unendlich — der Autofokus sucht im Dunkeln vergeblich',
+ camPhoneV:'Nachtmodus, auf etwas Festes gestützt. 10–30 Sekunden. Blitz aus.',
+ camNote:'Ein Startpunkt aus der Aktivität dieser Nacht und dem Mondlicht. Mach ein Bild, schau es an, korrigiere. Ein Stativ zählt mehr als jede dieser Zahlen.',
+ camFaint:'Schwache Nordlichter ziehen langsam, du kannst also lange belichten.',
+ camBright:'Helle Nordlichter bewegen sich schnell — kurz belichten, sonst verschmiert die Struktur.',
+ camMoon:'Das Mondlicht übernimmt einen Teil, also ISO herunter.'},
+fr:{ locale:'fr-FR',
+ eyebrow:'Aurores cette nuit', checking:'Vérification…', working:'Calcul de l’obscurité de la nuit.',
+ chartTitle:'Jusqu’où descend la nuit',
+ caption:'La ligne rose est le soleil au fil de la nuit. Les aurores exigent qu’il passe sous la ligne des −12°, et plus la bande est sombre, mieux c’est. La colonne mise en évidence est le meilleur créneau ; la bande du dessous indique quand la lune est au-dessus de l’horizon.',
+ gDark:'Obscurité', gCloud:'Nuages', gMoon:'Lune', gKp:'Probabilité',
+ outlook:'Les trois prochaines nuits', tonight:'Cette nuit', spots:'Où aller',
+ safety:'Prudence près de l’eau, et ne marche jamais sur la glace de mer ou de lac sans être certain qu’elle porte. Habille-toi pour rester immobile : observer les aurores est un travail de froid.',
+ sunrise:'Lever du soleil', sunset:'Coucher du soleil', daylen:'Durée du jour',
+ week:'Évolution cette semaine', temp:'Température', rain:'Pluie cette nuit', rainNone:'pas de pluie',
+ gloss:'Ce que signifient les chiffres', status:'État', refresh:'Actualiser', updated:'Mis à jour',
+ justNow:'à l’instant', minsAgo:m=>`il y a ${m} min`,
+ bandDay:'JOUR', bandCivil:'CIVIL', bandNaut:'NAUTIQUE', bandAstro:'ASTRONOMIQUE',
+ bandNight:'NUIT NOIRE', moonAxis:'lune',
+ tierCivil:'Crépuscule civil seulement', tierNaut:'Crépuscule nautique',
+ tierAstro:'Obscurité astronomique', tierNight:'Nuit noire',
+ phases:['Nouvelle lune','Premier croissant','Premier quartier','Lune gibbeuse croissante','Pleine lune','Lune gibbeuse décroissante','Dernier quartier','Dernier croissant'],
+ winSearch:'Recherche du meilleur créneau…', winFound:(a,b)=>`Meilleur créneau  ${a} – ${b}`,
+ winNoDark:'Aucun créneau cette nuit — il ne fait jamais assez sombre',
+ winNoClear:'Aucun créneau cette nuit — trop de nuages',
+ hNotTonight:'Pas cette nuit', hProbablyNot:'Peu probable', hClouded:'Couvert',
+ hQuiet:'Ciel calme', hMoon:'La lune gêne', hGo:'Sors dehors', hLook:'Ça vaut un coup d’œil',
+ bNeverDark:(d,n)=>`Le ciel ne dépasse pas le crépuscule civil. Les nuits vraiment noires reviennent vers le <strong>${d}</strong> — dans ${n} jours.`,
+ bNeverDarkPlain:'Pour l’instant le ciel ne dépasse pas le crépuscule civil.',
+ bNaut:'Crépuscule nautique au mieux. Seule une aurore intense passerait, et l’horizon nord reste délavé.',
+ bClouded:c=>`Assez sombre, mais ${c}% de nuages pendant la nuit. Rien ne passe à travers.`,
+ bQuiet:k=>`Assez sombre, mais ${k} au-dessus d’Oulu. Un regard vers le nord, pas une sortie.`,
+ bMoon:(i,a)=>`Lune à ${i}% et à ${a}° au-dessus de l’horizon au moment le plus sombre. Seule une aurore brillante la dépassera.`,
+ bGo:(k,c,d)=>`${k}, ${c}, ${d}. Éloigne-toi des lampadaires.`,
+ bLook:(d,c,k)=>`${d}, ${c}, ${k}. Surveille l’horizon nord.`,
+ clear:'dégagé', cloudPct:c=>`${c}% de nuages`, cloudUnknown:'nuages inconnus', kpUnknown:'inconnu',
+ nDarkNote:(n,t)=>`${n}. Minimum à ${t}.`,
+ nCloudNote:'Moyenne sur les heures sombres à venir.', nCloudNone:'Aucune heure sombre dans la plage.',
+ nMoonUp:(p,a,s)=>`${p}, à ${a}° au moment le plus sombre. ${s}`,
+ nMoonDown:p=>`${p}, sous l’horizon au moment le plus sombre. Aucune gêne.`,
+ moonWash:'Efface les aurores faibles.', moonGlare:'Un peu d’éblouissement.',
+ kpStorm:'Niveau de tempête.', kpActive:'Actif.', kpLow:'Horizon nord seulement.', kpQuiet:'Très calme.',
+ bzLine:(v,d)=>`Bz ${v} nT ${d}. `, bzSouthGood:'vers le sud — favorable', bzSouth:'vers le sud — légèrement favorable', bzNorth:'vers le nord — défavorable',
+ sTooLight:'Trop clair', sClouded:'Nuageux', sMoonlit:'Clair de lune', sPromising:'Prometteur', sPossible:'Possible',
+ bSun:'soleil', bCloud:'nuages', bRain:'pluie', bMoonUp:'haut', bMoonDown:'bas',
+ fSunMoon:'Soleil et lune', fSunMoonD:'calculé dans le navigateur, sans réseau',
+ fWeather:'Météo · Open-Meteo', fWeatherD:'nuages, pluie, température, heures du soleil',
+ fMag:'Magnétomètre · Institut météorologique finlandais', fKp:'Kp planétaire · NOAA SWPC', fWind:'Vent solaire · NOAA SWPC',
+ fSpace:'Météo de l’espace', fSpaceOk:'NOAA via ta fonction',
+ fBlocked:'bloqué ou hors ligne', fNoFn:'fonction inaccessible — seulement sur le site publié',
+ fPartial:'partiel', unavailable:'Indisponible.',
+ tipService:'Le navigateur va bien : une autre source a chargé sur la même page, donc le problème vient du service. L’obscurité et la lune sont calculées en local et restent exactes.',
+ tipAll:'Toutes les sources réseau ont échoué. Si tu as ouvert le fichier depuis le disque, la fonction n’existe pas — utilise le site publié.',
+ ask:'Expliquer', localLbl:(st,km)=>`${st}, à ${km} km · dernières 90 min`,
+ kpRef:k=>`Kp global ${k}`,
+ attribution:'Données de magnétomètre : Institut météorologique finlandais, CC BY 4.0. Seuils provisoires.',
+ qDark:'Jusqu’où le soleil descend sous l’horizon cette nuit. Les aurores exigent moins de −12°, et moins de −18° est encore mieux. C’est de l’astronomie pure, calculée dans ton navigateur, et la seule chose qu’aucune prévision ne peut changer.',
+ qCloud:'Nébulosité moyenne sur les heures sombres à venir. Les aurores se produisent vers 100 km d’altitude, donc un nuage épais les masque complètement — peu importe l’activité au-dessus. Sous 40%, c’est exploitable.',
+ qMoon:'Quelle part de la lune est éclairée, et si elle est au-dessus de l’horizon quand le ciel est au plus sombre. Une pleine lune haute noie les aurores faibles aussi efficacement que les nuages. Sous l’horizon, sa phase n’a aucune importance.',
+ qKp:'Le chiffre principal est la perturbation magnétique à la station de l’Institut météorologique finlandais la plus proche d’Oulu — la plus grande variation du champ horizontal sur les 90 dernières minutes, en nanoteslas. Un magnétomètre à 100 km en dit plus que l’indice Kp global, une moyenne planétaire sur trois heures. Le Kp figure à côté pour référence. Les seuils sont provisoires et seront affinés cet hiver, confrontés aux nuits où des aurores apparaissent réellement.',
+ bzSouthStrong:'vers le sud — très favorable',
+ kpScale:[
+  {h:'Perturbation locale · 90 dernières minutes',r:[['moins de 100 nT','calme ; variation nocturne ordinaire'],
+   ['100–250 nT','quelque chose bouge ; regarde au nord'],['250–500 nT','actif ; bonnes chances au zénith'],
+   ['plus de 500 nT','tempête']]},
+  {h:'Kp global · planétaire, trois heures',r:[['moins de 2','trop calme pour Oulu'],
+   ['2–3','horizon nord seulement'],['4–5','peut atteindre le zénith'],['plus de 5','tempête géomagnétique']]},
+  {h:'Bz · direction du champ du vent solaire',r:[['au-dessus de 0','vers le nord ; défavorable'],
+   ['0 à −5','légèrement favorable'],['−5 à −10','favorable'],['sous −10','très favorable']]}],
+ disclaimer:'Les prévisions sont des estimations, pas des promesses. Les seuils locaux sont provisoires et se calibrent sur la saison 2026–27.',
+ privacy:'Confidentialité',
+ privacyText:'Aucun cookie, aucune analytique, aucun suivi d\u2019aucune sorte. Tes choix de langue et de mode nuit restent sur ton appareil et ne sont envoyés nulle part.\n\nTrois services extérieurs interviennent. Les données de météo spatiale et de magnétomètre sont récupérées par le serveur de ce site : la NOAA et l\u2019Institut météorologique finlandais n\u2019apprennent donc rien sur toi. Les données météo sont demandées par ton navigateur directement à Open-Meteo, et les polices se chargent depuis Google Fonts — les deux voient donc ton adresse IP, comme pour toute requête web. Rien d\u2019autre ne quitte ton appareil.',
+ spotSource:'Lieux d\u2019après les recommandations publiées par Visit Oulu.',
+ tipsTitle:"Avant de partir", dirLabel:"Itinéraire",
+ tips:[{h:"Sois patient",p:"Les aurores arrivent par vagues. Une bonne nuit, c’est souvent une heure de rien suivie de vingt minutes de tout. Prévois de rester, pas de jeter un œil."},{h:"Laisse tes yeux s’adapter",p:"Vingt minutes dans le noir changent tout, et un seul coup d’œil à un écran de téléphone efface le bénéfice. Utilise le mode nuit rouge de cette page."},{h:"Regarde au nord, et regarde bas",p:"Depuis Oulu, la plupart des aurores commencent par un arc pâle sur l’horizon nord. Seule une forte activité monte au zénith."},{h:"Ça paraît gris, pas vert",p:"Les aurores faibles apparaissent à l’œil nu comme une brume gris pâle. L’appareil photo voit la couleur bien avant toi : fais un cliché test à ISO élevé pour savoir si ce nuage est en fait une aurore."},{h:"Éloigne-toi des lampadaires",p:"Même quelques centaines de mètres aident. Tourne le dos aux phares des voitures et laisse le ciel être ce qu’il y a de plus lumineux."},{h:"Habille-toi pour rester immobile",p:"Tu ne vas pas marcher. Ajoute une couche de plus que ce qui semble raisonnable, et emporte de quoi t’asseoir."}],
+ skyTitle:"Où regarder", skyCap:"Ta vue face au nord. La bande indique à peu près à quelle hauteur les aurores sont probables cette nuit : basses sur l’horizon quand l’activité est calme, au zénith quand elle est forte. Les arbres et les bâtiments masquent précisément la partie basse où se tiennent les aurores faibles, d’où l’importance d’un horizon nord dégagé.", skyBand:"aurore probable", skyTooLight:"Pas assez sombre cette nuit", skyFacing:"face au nord",
+ cN:"N", cNE:"NE", cNW:"NO", cW:"O", cE:"E",
+ hGoNow:'Sors maintenant', hCloudWay:'Les nuages gênent', eyebrowStorm:'Tempête géomagnétique',
+ bNautQuiet:k=>`Crépuscule nautique au mieux, et seulement ${k} au-dessus d’Oulu. Rien à voir, et pas assez sombre pour le voir.`,
+ bGoNow:(a,c,d)=>`${a} au-dessus d’Oulu — c’est rare. ${c}, ${d}, et au zénith plutôt que sur l’horizon.`,
+ bCloudWay:(a,c)=>`${a} au-dessus des nuages, mais ${c}. Guette les trouées.`,
+ bestFrom:x=>` Au mieux à partir de ${x}.`,
+ spotList:[
+  {n:"Nallikari",d:"3,3 km au nord-ouest",t:"Plage de sable face à la mer ouverte. Regarde vers le nord au-dessus de l’eau : l’horizon nord le plus dégagé près de la ville, avec le phare en silhouette."},
+  {n:"Hollihaka",d:"dans le centre",t:"Un parc en plein centre, au bord de l’eau. La lumière urbaine est bien là, mais c’est l’option la plus simple à pied si l’aurore a déjà commencé."},
+  {n:"Kuivasjärvi",d:"6 km au nord",t:"Rive du lac près de l’université. Eau ouverte au nord et plus sombre que le centre ; la rive sud offre la vue la plus dégagée sur le lac."},
+  {n:"Pyykösjärvi",d:"4,5 km au nord-est",t:"L’autre lac universitaire. Vue semblable, en général plus tranquille que Kuivasjärvi."}],
+ glossary:[
+  {t:'Indice Kp', p:'Une échelle de 0 à 9 de l’activité géomagnétique mondiale. Oulu est assez au nord pour que Kp 2 amène déjà des aurores sur l’horizon nord, et Kp 4 ou plus peut les amener au zénith. Sous Kp 2, inutile de prendre froid.'},
+  {t:'Bz', p:'La direction du champ magnétique venu du soleil, en nanoteslas. Quand il pointe vers le sud — chiffre négatif — le champ terrestre s’ouvre et les aurores deviennent bien plus probables. Bz prévient plus tôt que le Kp, qui décrit ce qui s’est déjà passé.'},
+  {t:'Civil, nautique, astronomique', p:'Jusqu’où le soleil est descendu sous l’horizon : 6°, 12° et 18°. Une aurore exige au moins −12°. En été à Oulu le soleil ne descend jamais si bas, d’où l’absence totale d’aurores entre fin avril et mi-août environ.'},
+  {t:'La lune', p:'Une lune brillante efface les aurores faibles aussi bien que les nuages. Une pleine lune haute peut tout masquer sauf une aurore intense. Regarde à la fois sa phase et si elle est réellement au-dessus de l’horizon.'},
+  {t:'La saison', p:'Selon l’Institut météorologique finlandais, des aurores sont visibles à Oulu environ 25% des nuits — dès qu’il fait sombre et clair. La saison va à peu près de septembre à avril.'}],
+ season:'Saison des aurores à Oulu',
+ seasonCap:'Chaque barre est une nuit, sa hauteur le nombre d’heures pendant lesquelles le soleil reste sous −12°. Là où les barres disparaissent, les aurores sont simplement impossibles : c’est l’été d’Oulu, pas de la malchance.',
+ darkHrs:'h d’obscurité', seasonNone:'aucune nuit sombre',
+ camera:'Réglages photo', camIso:'ISO', camShutter:'Obturation', camAperture:'Ouverture',
+ camFocus:'Mise au point', camPhone:'Téléphone',
+ camFocusV:'Manuelle, réglée sur l’infini — l’autofocus cherche en vain dans le noir',
+ camPhoneV:'Mode nuit, calé sur quelque chose de stable. 10–30 secondes. Flash coupé.',
+ camNote:'Un point de départ calculé depuis l’activité de la nuit et le clair de lune. Fais une image, regarde-la, ajuste. Un trépied compte plus que n’importe lequel de ces chiffres.',
+ camFaint:'Les aurores faibles se déplacent lentement, tu peux donc laisser l’obturateur ouvert.',
+ camBright:'Les aurores intenses bougent vite — obturation courte, sinon la structure se brouille.',
+ camMoon:'Le clair de lune fait une partie du travail, alors baisse l’ISO.'}
+};
+
+const ICON={
+ dark:"<path d=\"M1.5 6.2h13\"/><circle cx=\"8\" cy=\"11.6\" r=\"2.9\"/><path d=\"M8 6.2v2.5\" stroke-dasharray=\"1.4 1.4\"/>",
+ cloud:"<path d=\"M4.6 12.4h6.9a2.75 2.75 0 0 0 .3-5.5 4 4 0 0 0-7.5-.6 2.7 2.7 0 0 0 .3 6.1Z\"/>",
+ moon:"<path d=\"M12.6 10.3A5.6 5.6 0 1 1 7.2 3.1a4.5 4.5 0 0 0 5.4 7.2Z\"/>",
+ kp:"<path d=\"M4.1 13.2c1.5-3.1.7-6.7 1.7-10.2\"/><path d=\"M8 13.8c1.6-3.3.8-7.2 1.8-11.3\"/><path d=\"M11.9 12.7c1.2-2.6.6-5.7 1.5-8.8\"/>",
+ clock:"<circle cx=\"8\" cy=\"8\" r=\"6\"/><path d=\"M8 4.5V8l2.5 1.7\"/>",
+ eye:"<path d=\"M1.4 8S4 3.6 8 3.6 14.6 8 14.6 8 12 12.4 8 12.4 1.4 8 1.4 8Z\"/><circle cx=\"8\" cy=\"8\" r=\"1.9\"/>",
+ north:"<path d=\"M8 1.9 11.2 13.6 8 11.1 4.8 13.6Z\"/>",
+ camera:"<rect x=\"2\" y=\"5.1\" width=\"12\" height=\"8\" rx=\"1.5\"/><circle cx=\"8\" cy=\"9.1\" r=\"2.3\"/>",
+ lamp:"<path d=\"M4.9 3.9h6.2l-1.1 2.7H6Z\"/><path d=\"M8 6.6V13.6\"/><path d=\"M5.4 13.6h5.2\"/>",
+ temp:"<path d=\"M9.7 8.7V3.5a1.7 1.7 0 1 0-3.4 0v5.2a3.1 3.1 0 1 0 3.4 0Z\"/><circle cx=\"8\" cy=\"11.5\" r=\"1.15\" fill=\"currentColor\" stroke=\"none\"/>"
+};
+const ico=(n,cls)=>'<svg class="ico '+(cls||'')+'" viewBox="0 0 16 16" aria-hidden="true">'+ICON[n]+'</svg>';
+const TIPICONS=['clock','eye','north','camera','lamp','temp'];
+
+// Coordinates verified against Google Places; index-matched to spotList.
+const SPOTGEO=[
+ {lat:65.0306,lon:25.4114,pid:'ChIJJ8CzSYAygEYR5hFJchNSdlI'},
+ {lat:65.0091,lon:25.4544,pid:'ChIJ5eGbGrsygEYRrEdaWbTlWMY'},
+ {lat:65.0673,lon:25.4710,pid:'ChIJg_2RvQEtgEYRz7e31CjkQAU'},
+ {lat:65.0515,lon:25.4981,pid:'ChIJB57E8zwtgEYRUjx4xOGI0t4'}
+];
+
+let LANG='en', MODE='day';
+try{ const l=localStorage.getItem('oulu-lang'); if(l&&STR[l]) LANG=l;
+     else { const b=(navigator.language||'').slice(0,2); if(STR[b]) LANG=b; }
+     const m=localStorage.getItem('oulu-mode'); if(m==='night') MODE='night';
+}catch(e){}
+const t=(k,...a)=>{ const v=STR[LANG][k]; return typeof v==='function'?v(...a):v; };
+
+/* ==========  ASTRONOMY  ========== */
+const LAT=65.0121, LON=25.4651, RAD=Math.PI/180, TZ='Europe/Helsinki';
+const dnum = d => d.getTime()/86400000 + 2440587.5 - 2451545.0;
+
+/* Everything below is pinned to Helsinki, not the visitor's own clock,
+   so the page reads the same from Madrid as it does from Oulu. */
+const _dtf=new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour12:false,
+  year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+function _parts(x){ const o={}; _dtf.formatToParts(x).forEach(v=>{if(v.type!=='literal')o[v.type]=v.value;}); return o; }
+function tzOff(x){ const p=_parts(x);
+  return Date.UTC(+p.year,+p.month-1,+p.day,p.hour==='24'?0:+p.hour,+p.minute,+p.second)-x.getTime(); }
+/* a Date for a given Helsinki wall-clock moment */
+function hDate(y,mo,d,h,mi){ const g=Date.UTC(y,mo,d,h||0,mi||0);
+  return new Date(g - tzOff(new Date(g))); }
+/* Helsinki calendar parts of an instant */
+function hP(x){ const p=_parts(x);
+  return {y:+p.year,mo:+p.month-1,d:+p.day,h:p.hour==='24'?0:+p.hour,mi:+p.minute}; }
+function sunEclLon(d){ const L=(280.460+0.9856474*d)%360, g=(357.528+0.9856003*d)%360;
+  return L+1.915*Math.sin(g*RAD)+0.020*Math.sin(2*g*RAD); }
+function gmstDeg(d){ let g=(18.697374558+24.06570982441908*d)%24; if(g<0)g+=24; return g*15; }
+function altAz(ra,dec,d){ const ha=((gmstDeg(d)+LON-ra)%360+540)%360-180;
+  const alt=Math.asin(Math.sin(LAT*RAD)*Math.sin(dec*RAD)+Math.cos(LAT*RAD)*Math.cos(dec*RAD)*Math.cos(ha*RAD))/RAD;
+  const sinA=-Math.sin(ha*RAD)*Math.cos(dec*RAD)/Math.cos(alt*RAD);
+  const cosA=(Math.sin(dec*RAD)-Math.sin(alt*RAD)*Math.sin(LAT*RAD))/(Math.cos(alt*RAD)*Math.cos(LAT*RAD));
+  return {alt, az:((Math.atan2(sinA,cosA)/RAD)%360+360)%360}; }
+const altOf=(ra,dec,d)=>altAz(ra,dec,d).alt;
+function sunAlt(x){ const d=dnum(x), lam=sunEclLon(d), e=23.4397;
+  return altOf(Math.atan2(Math.cos(e*RAD)*Math.sin(lam*RAD),Math.cos(lam*RAD))/RAD,
+               Math.asin(Math.sin(e*RAD)*Math.sin(lam*RAD))/RAD, d); }
+function moonAt(x){ const d=dnum(x), e=23.4397;
+  const L=218.316+13.176396*d, M=134.963+13.064993*d, F=93.272+13.229350*d;
+  const lam=L+6.289*Math.sin(M*RAD), bet=5.128*Math.sin(F*RAD);
+  const ra=Math.atan2(Math.sin(lam*RAD)*Math.cos(e*RAD)-Math.tan(bet*RAD)*Math.sin(e*RAD),Math.cos(lam*RAD))/RAD;
+  const dec=Math.asin(Math.sin(bet*RAD)*Math.cos(e*RAD)+Math.cos(bet*RAD)*Math.sin(e*RAD)*Math.sin(lam*RAD))/RAD;
+  const el=((lam-sunEclLon(d))%360+360)%360, pa=altAz(ra,dec,d);
+  return {alt:pa.alt, az:pa.az, illum:(1-Math.cos(el*RAD))/2, elong:el}; }
+/* Terminator drawn as an ellipse whose x-radius is R|1-2f|: a straight edge at
+   quarter, bulging one way for crescent and the other for gibbous. Mirrored when
+   waning. */
+function moonDisc(f, waxing, R){
+  const rx=(R*Math.abs(1-2*f)).toFixed(2), sw=f>0.5?1:0;
+  const lit=`M 0,${-R} A ${R},${R} 0 0,1 0,${R} A ${rx},${R} 0 0,${sw} 0,${-R} Z`;
+  return `<svg class="moondisc" viewBox="${-R-1} ${-R-1} ${2*R+2} ${2*R+2}" aria-hidden="true">
+    <g${waxing?'':' transform="scale(-1,1)"'}>
+      <circle cx="0" cy="0" r="${R}" fill="none" stroke="currentColor" stroke-width="1" opacity=".35"/>
+      <path d="${lit}" fill="currentColor"/>
+    </g></svg>`;
+}
+function phaseName(e){ return STR[LANG].phases[e<22||e>=338?0:e<68?1:e<112?2:e<158?3:e<202?4:e<248?5:e<292?6:7]; }
+function curve(b){ const P=hP(b), s=hDate(P.y,P.mo,P.d,12), o=[];
+  for(let m=0;m<=1440;m+=6){ const x=new Date(s.getTime()+m*60000); o.push({t:x,el:sunAlt(x),moon:moonAt(x)}); } return o; }
+function minSunOn(day){ const P=hP(day), s=hDate(P.y,P.mo,P.d,12); let lo=90;
+  for(let m=300;m<=1140;m+=15){ const e=sunAlt(new Date(s.getTime()+m*60000)); if(e<lo) lo=e; } return lo; }
+function nextDark(f){ const P=hP(f);
+  for(let i=0;i<300;i++){ const d=hDate(P.y,P.mo,P.d+i,12);
+    if(minSunOn(d)<-12) return {date:d,days:i}; } return null; }
+function tierOf(e){ return e>-6?{t:0,name:t('tierCivil')}:e>-12?{t:1,name:t('tierNaut')}
+  :e>-18?{t:2,name:t('tierAstro')}:{t:3,name:t('tierNight')}; }
+const LC=()=>STR[LANG].locale;
+const fmtT=x=>x.toLocaleTimeString(LC(),{hour:'2-digit',minute:'2-digit',timeZone:TZ});
+const fmtD=x=>x.toLocaleDateString(LC(),{day:'numeric',month:'long',year:'numeric',timeZone:TZ});
+const fmtDay=x=>x.toLocaleDateString(LC(),{weekday:'short',day:'numeric',month:'short',timeZone:TZ});
+const hhmm=m=>`${Math.floor(m/60)}h ${String(Math.round(m%60)).padStart(2,'0')}m`;
+
+/* ==========  CHART  ========== */
+const isNarrow = () => (window.innerWidth||900) < 620;
+function draw(pts,low,win){
+  const nar=isNarrow();
+  const W=nar?380:900, H=nar?230:250, L=nar?32:44, R=10,T=8,B=44,TOP=4,BOT=-26,pb=H-B;
+  document.getElementById('chart').setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const x=i=>L+(i/(pts.length-1))*(W-L-R);
+  const y=e=>T+((TOP-Math.max(BOT,Math.min(TOP,e)))/(TOP-BOT))*(pb-T);
+  const bands=[[4,0,'--b-day',t('bandDay')],[0,-6,'--b-civil',t('bandCivil')],
+    [-6,-12,'--b-naut',t('bandNaut')],[-12,-18,'--b-astro',t('bandAstro')],[-18,-26,'--b-night',t('bandNight')]];
+  let s='';
+  bands.forEach(([a,b,v,lab])=>{
+    s+=`<rect x="${L}" y="${y(a)}" width="${W-L-R}" height="${y(b)-y(a)}" fill="var(${v})"/>`;
+    s+=`<text class="band-label" x="${L+6}" y="${y(a)+11}">${lab}</text>`; });
+  if(win) s+=`<rect x="${x(win.a)}" y="${T}" width="${Math.max(2,x(win.b)-x(win.a))}" height="${pb-T}"
+    fill="var(--c-win)" stroke="var(--c-wins)" stroke-width="1"/>`;
+  [0,-6,-12,-18].forEach(e=>{
+    s+=`<line x1="${L}" y1="${y(e)}" x2="${W-R}" y2="${y(e)}" stroke="var(--rule)" stroke-dasharray="3 4"/>`;
+    s+=`<text class="axis" x="${L-8}" y="${y(e)+3.5}" text-anchor="end">${e}°</text>`; });
+  s+=`<path d="${pts.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p.el).toFixed(1)}`).join('')}"
+    fill="none" stroke="var(--hot)" stroke-width="2.3" stroke-linejoin="round"/>`;
+  const li=pts.indexOf(low), en=li>pts.length*.7;
+  s+=`<circle cx="${x(li)}" cy="${y(low.el)}" r="4.2" fill="var(--hot)"/>`;
+  s+=`<text class="axis" x="${x(li)+(en?-9:9)}" y="${y(low.el)+4}" text-anchor="${en?'end':'start'}"
+    fill="var(--hot)">${low.el.toFixed(1)}° · ${fmtT(low.t)}</text>`;
+  const sy=pb+8, sh=7;
+  s+=`<rect x="${L}" y="${sy}" width="${W-L-R}" height="${sh}" fill="var(--rule)" opacity=".4"/>`;
+  let run=null;
+  pts.forEach((p,i)=>{ const up=p.moon.alt>0;
+    if(up&&run===null) run=i;
+    if((!up||i===pts.length-1)&&run!==null){
+      s+=`<rect x="${x(run)}" y="${sy}" width="${Math.max(1,x(i)-x(run))}" height="${sh}"
+        fill="var(--accent)" opacity="${(0.14+0.62*pts[run].moon.illum).toFixed(2)}"/>`; run=null; } });
+  s+=`<text class="axis" x="${L-8}" y="${sy+6}" text-anchor="end">${t('moonAxis')}</text>`;
+  (nar?[0,360,720,1080,1440]:[0,240,480,720,960,1200,1440]).forEach((m,j,arr)=>{
+    const i=Math.min(m/6,pts.length-1);
+    const an = j===0?'start' : j===arr.length-1?'end' : 'middle';
+    s+=`<text class="axis" x="${x(i)}" y="${H-6}" text-anchor="${an}">${fmtT(pts[i].t)}</text>`; });
+  document.getElementById('chart').innerHTML=s;
+}
+
+
+/* ==========  YEAR STRIP  ========== */
+let YEARCACHE=null;
+function darkHoursByDay(year){
+  if(YEARCACHE&&YEARCACHE.y===year) return YEARCACHE.v;
+  const out=[];
+  for(let i=0;i<366;i++){
+    const s=hDate(year,0,1+i,0);
+    if(hP(s).y!==year) break;
+    let mins=0;
+    for(let m=0;m<1440;m+=20){ if(sunAlt(new Date(s.getTime()+m*60000))<-12) mins+=20; }
+    out.push({date:s, h:mins/60});
+  }
+  YEARCACHE={y:year,v:out}; return out;
+}
+function drawYear(now){
+  const P=hP(now), data=darkHoursByDay(P.y), nar=isNarrow();
+  const W=nar?380:900, H=nar?110:120, L=8,R=8,T=6,B=22, pb=H-B;
+  document.getElementById('year').setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const maxH=Math.max(1,...data.map(d=>d.h));
+  const bw=(W-L-R)/data.length;
+  let s='';
+  data.forEach((d,i)=>{
+    const h=(d.h/maxH)*(pb-T);
+    if(h>0.4) s+=`<rect x="${(L+i*bw).toFixed(2)}" y="${(pb-h).toFixed(1)}" width="${(bw*1.05).toFixed(2)}"
+      height="${h.toFixed(1)}" fill="var(--accent)" opacity="${(0.35+0.5*(d.h/maxH)).toFixed(2)}"/>`;
+  });
+  s+=`<line x1="${L}" y1="${pb}" x2="${W-R}" y2="${pb}" stroke="var(--rule)"/>`;
+  const doy=Math.round((hDate(P.y,P.mo,P.d,0)-hDate(P.y,0,1,0))/86400000);
+  const tx=L+doy*bw;
+  s+=`<line x1="${tx.toFixed(1)}" y1="${T}" x2="${tx.toFixed(1)}" y2="${pb}" stroke="var(--hot)" stroke-width="1.5"/>`;
+  const todayH=data[Math.max(0,Math.min(data.length-1,doy))].h;
+  const lab=todayH>0.2?`${todayH.toFixed(1)} ${t('darkHrs')}`:t('seasonNone');
+  const anchor = doy>data.length*0.62?'end':'start';
+  s+=`<text class="axis" x="${(tx+(anchor==='end'?-6:6)).toFixed(1)}" y="${T+10}"
+     text-anchor="${anchor}" fill="var(--hot)">${lab}</text>`;
+  for(let m=0;m<12;m+=(nar?2:1)){
+    const md=hDate(P.y,m,1,0);
+    const md0=Math.round((md-hDate(P.y,0,1,0))/86400000);
+    let lab=md.toLocaleDateString(LC(),{month:'short',timeZone:TZ}).replace('.','');
+    if(nar) lab=lab.slice(0,3);
+    s+=`<text class="axis" x="${(L+md0*bw+bw*(nar?28:14)).toFixed(1)}" y="${H-7}" text-anchor="middle">${lab}</text>`;
+  }
+  document.getElementById('year').innerHTML=s;
+}
+
+/* ==========  CAMERA  ========== */
+function cameraSettings(kp,moonIll,moonUp){
+  const bright = kp!=null && kp>=4;
+  const mid    = kp!=null && kp>=2.5;
+  const moonly = moonUp && moonIll>0.5;
+  let iso = bright?800 : mid?1600 : 3200;
+  let sec = bright?4 : mid?8 : 15;
+  if(moonly) iso = Math.max(400, iso/2);
+  const why = bright?t('camBright') : t('camFaint');
+  return {iso, sec, f:'f/2.8', moonly, why};
+}
+function paintCamera(kp,ill,up){
+  const c=cameraSettings(kp,ill/100,up);
+  const sum=document.getElementById('t-camera');
+  sum.innerHTML=`${t('camera')} <span class="sumval">— ISO ${c.iso} · ${c.sec}s · ${c.f}</span>`;
+  const rows=[
+    [t('camIso'), `${c.iso}${c.moonly?' — '+t('camMoon'):''}`],
+    [t('camShutter'), `${c.sec} s — ${c.why}`],
+    [t('camAperture'), `${c.f} ${t('camAperture')==='Aperture'?'or the widest your lens opens':''}`.trim()],
+    [t('camFocus'), t('camFocusV')],
+    [t('camPhone'), t('camPhoneV')]
+  ];
+  document.getElementById('camlist').innerHTML =
+    rows.map(([a,b])=>`<div><b>${a}</b><p>${b}</p></div>`).join('')
+    + `<div><p style="opacity:.8">${t('camNote')}</p></div>`;
+}
+
+/* ==========  VERDICT CASCADE  ==========
+   First match wins. Mirrored in functions/api/log.js so the logger records
+   the same headline the page would have shown. Keep the two in step. */
+const VERDICT_RULES=[
+  ['darkNever', c=>c.darkT===0],
+  ['nautQuiet', c=>c.darkT===1 && c.quiet],
+  ['naut',      c=>c.darkT===1],
+  ['overcast',  c=>c.overcast],
+  ['quiet',     c=>c.quiet],
+  ['goNow',     c=>c.storm && c.clear],
+  ['go',        c=>c.good  && c.clear],
+  ['moon',      c=>c.moonBad],
+  ['cloudWay',  c=>c.murky],
+  ['look',      ()=>true]
+];
+const verdictKey = c => VERDICT_RULES.find(r=>r[1](c))[0];
+
+/* ==========  WHERE TO LOOK  ==========
+   A 180-degree view of the northern sky. The aurora band sits at the elevation
+   tonight's activity suggests: low on the horizon when quiet, overhead when
+   strong. Approximate, and following the same provisional thresholds. */
+function auroraBand(darkTier, r, kp){
+  if(darkTier<2) return null;
+  const lvl = r!==null ? (r>=500?3 : r>=250?2 : r>=100?1 : 0)
+            : (kp!==null ? (kp>=5?3 : kp>=3.5?2 : kp>=2?1 : 0) : 0);
+  return [[2,13],[10,30],[25,60],[45,90]][lvl];
+}
+function drawSky(darkTier, r, kp, moon){
+  const nar=isNarrow();
+  const W=nar?380:900, H=nar?250:320, T=26, HZ=H-58;
+  const svg=document.getElementById('sky');
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  const ax=a=>((((a-270)%360)+360)%360/180)*W;
+  const ey=e=>HZ-(Math.max(0,Math.min(90,e))/90)*(HZ-T);
+  let g='<rect x="0" y="'+(T-10)+'" width="'+W+'" height="'+(HZ-T+10)+'" fill="var(--b-astro)"/>';
+  [30,60,90].forEach(e=>{
+    g+='<line x1="0" y1="'+ey(e)+'" x2="'+W+'" y2="'+ey(e)+'" stroke="var(--rule)" stroke-dasharray="2 5"/>'
+      +'<text class="axis" x="4" y="'+(ey(e)-4)+'">'+e+'\u00b0</text>'; });
+
+  const band=auroraBand(darkTier,r,kp);
+  if(band){
+    const lo=band[0], hi=band[1], mid=W/2, lift=nar?10:22;
+    g+='<path d="M 0,'+ey(lo)+' Q '+mid+','+(ey(lo)-lift)+' '+W+','+ey(lo)
+      +' L '+W+','+ey(hi)+' Q '+mid+','+(ey(hi)-lift)+' 0,'+ey(hi)+' Z" fill="var(--accent)" opacity=".2"/>';
+    [lo,hi].forEach(e=>{ g+='<path d="M 0,'+ey(e)+' Q '+mid+','+(ey(e)-lift)+' '+W+','+ey(e)
+      +'" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity=".65"/>'; });
+    g+='<text class="skylabel" x="'+mid+'" y="'+((ey(lo)+ey(hi))/2+3)+'" text-anchor="middle">'+t('skyBand')+'</text>';
+  } else {
+    g+='<text class="skylabel" x="'+(W/2)+'" y="'+((T+HZ)/2)+'" text-anchor="middle" opacity=".8">'+t('skyTooLight')+'</text>';
+  }
+
+  if(moon.alt>0){
+    const d=((((moon.az-270)%360)+360)%360);
+    if(d<=180){
+      const mx=ax(moon.az), my=ey(moon.alt), rr=nar?7:9;
+      g+='<circle cx="'+mx+'" cy="'+my+'" r="'+(rr+4)+'" fill="var(--hot)" opacity=".15"/>'
+        +'<circle cx="'+mx+'" cy="'+my+'" r="'+rr+'" fill="var(--hot)" opacity="'+(0.3+0.6*moon.illum).toFixed(2)+'"/>'
+        +'<text class="axis" x="'+mx+'" y="'+(my-rr-6)+'" text-anchor="middle" fill="var(--hot)">'+t('moonAxis')+'</text>';
+    }
+  }
+
+  g+='<rect x="0" y="'+HZ+'" width="'+W+'" height="'+(H-HZ)+'" fill="var(--b-night)"/>';
+  let tree='';
+  for(let x=0;x<W;x+=(nar?17:26)){ const hh=6+((x*37)%11);
+    tree+='M '+x+','+HZ+' l '+(nar?4:6)+',-'+hh+' l '+(nar?4:6)+','+hh+' '; }
+  g+='<path d="'+tree+'" fill="none" stroke="var(--b-night)" stroke-width="6" opacity=".9"/>'
+    +'<path d="'+tree+'" fill="none" stroke="var(--muted)" stroke-width="1" opacity=".45"/>'
+    +'<line x1="0" y1="'+HZ+'" x2="'+W+'" y2="'+HZ+'" stroke="var(--rule)" stroke-width="1.5"/>';
+
+  [[270,t('cW')],[315,t('cNW')],[0,t('cN')],[45,t('cNE')],[90,t('cE')]].forEach(v=>{
+    const a=v[0], x=Math.max(12,Math.min(W-12,ax(a)));
+    g+='<line x1="'+ax(a)+'" y1="'+HZ+'" x2="'+ax(a)+'" y2="'+(HZ+7)+'" stroke="var(--rule)"/>'
+      +'<text class="compass" x="'+x+'" y="'+(H-16)+'" text-anchor="middle"'
+      +(a===0?' fill="var(--accent)"':'')+'>'+v[1]+'</text>'; });
+  g+='<text class="axis" x="'+(W/2)+'" y="'+(H-3)+'" text-anchor="middle">'+t('skyFacing')+'</text>';
+  svg.innerHTML=g;
+}
+
+/* ==========  UI  ========== */
+const feeds=[];
+function feed(n,ok,d){ feeds.push({n,ok,d}); }
+function renderFeeds(){
+  document.getElementById('feedlist').innerHTML=feeds.map(f=>
+    `<div class="feed ${f.ok?'ok':'bad'}"><span class="mark">${f.ok?'✓':'✕'}</span><span>${f.n} — ${f.d}</span></div>`).join('');
+  const wOk=feeds.some(f=>f.n.indexOf('Open-Meteo')>-1&&f.ok), bad=feeds.some(f=>!f.ok);
+  const tip=document.getElementById('tip');
+  if(!bad){ tip.classList.remove('show'); return; }
+  tip.classList.add('show'); tip.textContent=wOk?t('tipService'):t('tipAll');
+}
+function paintStatic(){
+  document.documentElement.lang=LANG;
+  document.body.dataset.mode=MODE;
+  const tc0=document.querySelector('meta[name="theme-color"]');
+  if(tc0) tc0.content = MODE==='night'?'#0A0000':'#150E33';
+  const set=(i,v)=>{ const e=document.getElementById(i); if(e) e.textContent=v; };
+  set('t-eyebrow',t('eyebrow')); set('t-chart',t('chartTitle')); set('t-caption',t('caption'));
+  set('t-g-dark',t('gDark')); set('t-g-cloud',t('gCloud')); set('t-g-moon',t('gMoon')); set('t-g-kp',t('gKp'));
+  set('t-outlook',t('outlook')); set('t-spots',t('spots')); set('t-safety',t('safety'));
+  set('t-sunrise',t('sunrise')); set('t-sunset',t('sunset')); set('t-daylen',t('daylen'));
+  set('t-week',t('week')); set('t-temp',t('temp')); set('t-rain',t('rain'));
+  set('t-season',t('season')); set('t-seasoncap',t('seasonCap'));
+  document.querySelectorAll('.lbl[data-ico]').forEach(el=>{
+    if(!el.querySelector('.ico')) el.insertAdjacentHTML('afterbegin', ico(el.dataset.ico));
+  });
+  ['dark','cloud','moon','kp'].forEach(k=>{
+    const b=document.getElementById(k+'Q'); if(!b) return;
+    b.textContent=t('q'+k.charAt(0).toUpperCase()+k.slice(1));
+    if(k==='kp'){
+      const w=document.createElement('div'); w.className='scale';
+      w.innerHTML=t('kpScale').map(g=>'<h4>'+g.h+'</h4>'
+        +g.r.map(([a,d])=>'<div><span>'+a+'</span><span>'+d+'</span></div>').join('')).join('');
+      b.appendChild(w);
+    }
+  });
+  document.querySelectorAll('.qbtn').forEach(b=>b.setAttribute('aria-label',t('ask')));
+  set('t-attrib',t('attribution'));
+  set('t-disclaimer',t('disclaimer'));
+  set('t-privacy',t('privacy')); set('t-privacytext',t('privacyText'));
+  set('t-spotsource',t('spotSource'));
+  set('t-sky',t('skyTitle')); set('t-skycap',t('skyCap'));
+  set('t-tips',t('tipsTitle'));
+  document.getElementById('tiplist').innerHTML=STR[LANG].tips.map((x,i)=>
+    `<div class="tip-item">${ico(TIPICONS[i]||'clock')}<b>${x.h}</b><p>${x.p}</p></div>`).join('');
+  set('t-gloss',t('gloss')); set('t-status',t('status')); set('refresh',t('refresh'));
+  document.getElementById('lang').value=LANG;
+  document.getElementById('mode').setAttribute('aria-pressed',MODE==='night');
+  document.getElementById('spotlist').innerHTML=STR[LANG].spotList.map((s,i)=>{
+    const g=SPOTGEO[i]; if(!g) return '';
+    const url=`https://www.google.com/maps/search/?api=1&query=${g.lat},${g.lon}&query_place_id=${g.pid}`;
+    return `<div class="spot"><div class="nm">${s.n}</div><div class="dist">${s.d}</div>
+      <div class="txt">${s.t}</div>
+      <a class="maplink" href="${url}" target="_blank" rel="noopener noreferrer">${t('dirLabel')} ↗</a>
+      <div class="coords">${g.lat.toFixed(4)}°N ${g.lon.toFixed(4)}°E</div></div>`;}).join('');
+  document.getElementById('glosslist').innerHTML=STR[LANG].glossary.map(g=>
+    `<div><b>${g.t}</b><p>${g.p}</p></div>`).join('');
+}
+let lastRun=null, LAST=null;
+function stamp(){
+  if(!lastRun) return;
+  const m=Math.floor((Date.now()-lastRun)/60000);
+  document.getElementById('stamp').textContent=`${t('updated')} ${m<1?t('justNow'):t('minsAgo',m)}`;
+}
+
+/* ==========  MAIN  ========== */
+async function run(){
+  feeds.length=0; paintStatic();
+  const now=new Date();
+  document.getElementById('today').textContent=fmtD(now);
+  document.getElementById('answer').textContent=t('checking');
+  document.getElementById('because').textContent=t('working');
+  document.getElementById('window').textContent=t('winSearch');
+
+  const pts=curve(now), low=pts.reduce((a,p)=>p.el<a.el?p:a,pts[0]);
+  const dark=tierOf(low.el), mn=moonAt(low.t);
+  document.getElementById('darkVal').textContent=low.el.toFixed(1)+'°';
+  document.getElementById('darkVal').className='gate-value '+(dark.t>=2?'pass':'fail');
+  document.getElementById('darkNote').textContent=t('nDarkNote',dark.name,fmtT(low.t));
+  const ill=Math.round(mn.illum*100), up=mn.alt>0;
+  document.getElementById('moonVal').innerHTML=
+    moonDisc(mn.illum, mn.elong<180, 9)+'<span>'+ill+'%</span>';
+  document.getElementById('moonVal').className='gate-value moonrow '+(!up?'pass dim':ill>60?'warn':'');
+  document.getElementById('moonNote').textContent=up
+    ? t('nMoonUp',phaseName(mn.elong),mn.alt.toFixed(0),ill>60?t('moonWash'):t('moonGlare'))
+    : t('nMoonDown',phaseName(mn.elong));
+  feed(t('fSunMoon'),true,t('fSunMoonD'));
+
+  let cloud=null, hourly=null;
+  try{
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`
+      +`&current=temperature_2m&hourly=cloud_cover,precipitation,precipitation_probability&daily=sunrise,sunset,daylight_duration`
+      +`&timezone=Europe%2FHelsinki&past_days=7&forecast_days=4`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    const omOff=(d.utc_offset_seconds||0)*1000;
+    const omDate=str=>new Date(Date.parse(str+'Z')-omOff);
+    hourly=d.hourly; hourly.t=hourly.time.map(omDate);
+    const v=[], pv=[], pp=[];
+    hourly.t.forEach((x,i)=>{
+      if(x>now&&x<new Date(now.getTime()+26*36e5)&&sunAlt(x)<-3){
+        v.push(hourly.cloud_cover[i]);
+        if(hourly.precipitation) pv.push(hourly.precipitation[i]||0);
+        if(hourly.precipitation_probability) pp.push(hourly.precipitation_probability[i]||0);
+      }});
+    if(v.length) cloud=v.reduce((a,b)=>a+b,0)/v.length;
+    if(pv.length){
+      const mm=pv.reduce((a,b)=>a+b,0), pk=pp.length?Math.max.apply(null,pp):null;
+      const rel=document.getElementById('rainVal');
+      rel.textContent = mm<0.1 ? t('rainNone') : mm.toFixed(1)+' mm'+(pk!==null?' · '+pk+'%':'');
+      rel.className = mm<0.1?'pass':'warn';
+    }
+    document.getElementById('cloudVal').textContent=cloud!==null?Math.round(cloud)+'%':'—';
+    document.getElementById('cloudVal').className='gate-value '+(cloud===null?'':cloud<40?'pass':cloud>80?'fail':'warn');
+    document.getElementById('cloudNote').textContent=cloud!==null?t('nCloudNote'):t('nCloudNone');
+    document.getElementById('tempVal').textContent=d.current.temperature_2m.toFixed(1)+'°';
+    const i=7;
+    document.getElementById('sunrise').textContent=fmtT(omDate(d.daily.sunrise[i]));
+    document.getElementById('sunset').textContent=fmtT(omDate(d.daily.sunset[i]));
+    const tm=d.daily.daylight_duration[i]/60, wk=d.daily.daylight_duration[0]/60;
+    document.getElementById('daylen').textContent=hhmm(tm);
+    const dd=tm-wk, we=document.getElementById('weekdelta');
+    we.textContent=(dd>=0?'+':'−')+hhmm(Math.abs(dd)).replace(/^0h /,'');
+    we.className=dd>=0?'pass':'warn';
+    feed(t('fWeather'),true,t('fWeatherD'));
+  }catch(e){
+    document.getElementById('cloudNote').textContent=t('unavailable');
+    feed(t('fWeather'),false,e.message==='Failed to fetch'?t('fBlocked'):e.message);
+  }
+
+  const cloudAt=x=>{ if(!hourly||!hourly.t) return null; const ms=x.getTime(); let b=null,bd=Infinity;
+    for(let i=0;i<hourly.t.length;i++){ const dd=Math.abs(hourly.t[i].getTime()-ms);
+      if(dd<bd){bd=dd;b=hourly.cloud_cover[i];} } return bd<=90*60000?b:null; };
+
+  let win=null,cur=null,best=null;
+  pts.forEach((p,i)=>{ const c=cloudAt(p.t);
+    if(p.t>now&&p.el<-12&&(c===null||c<65)){ if(cur===null) cur={a:i,b:i}; else cur.b=i; }
+    else if(cur){ if(!best||cur.b-cur.a>best.b-best.a) best=cur; cur=null; } });
+  if(cur&&(!best||cur.b-cur.a>best.b-best.a)) best=cur;
+  if(best&&best.b-best.a>=2) win=best;
+  const we=document.getElementById('window');
+  if(win){ we.className='window'; we.textContent=t('winFound',fmtT(pts[win.a].t),fmtT(pts[win.b].t)); }
+  else { we.className='window none'; we.textContent=dark.t<2?t('winNoDark'):t('winNoClear'); }
+  draw(pts,low,win);
+
+  let kp=null,bz=null,fc=[],local=null;
+  try{
+    const r=await fetch('/api/spacewx'); const d=await r.json();
+    if(!r.ok) throw new Error((d.notes&&d.notes.join('; '))||('HTTP '+r.status));
+    kp=d.peak!=null?d.peak:d.current; bz=d.bz; fc=d.forecast||[]; local=d.local||null;
+    if(kp==null && !local) throw new Error('no data');
+    const lr = local?local.best.r:null;              /* provisional bands */
+    /* Anchored on 28 Jul 2026: FMI reported calm, Kp 2, local reading ~60 nT.
+       So 60 nT is quiet-day variation at this latitude, not activity.
+       Still provisional — tighten against nights aurora actually appear. */
+    const good   = lr!==null ? lr>=250 : kp>=3.5;
+    const mid    = lr!==null ? lr>=100 : kp>=1.5;
+    const strong = lr!==null ? lr>=500 : kp>=5;
+    document.getElementById('kpVal').textContent = lr!==null ? Math.round(lr)+' nT'
+      : (kp!=null?'Kp '+kp.toFixed(1):'—');
+    document.getElementById('kpVal').className='gate-value '+(good?'pass':mid?'warn':'fail');
+    const bits=[];
+    if(local) bits.push(t('localLbl',local.best.station,local.best.km));
+    if(kp!=null) bits.push(t('kpRef',kp.toFixed(1)));
+    if(bz!=null) bits.push('Bz '+bz.toFixed(1)+' nT '+(bz<-10?t('bzSouthStrong'):bz<-5?t('bzSouthGood'):bz<0?t('bzSouth'):t('bzNorth')));
+    bits.push(strong?t('kpStorm'):good?t('kpActive'):mid?t('kpLow'):t('kpQuiet'));
+    document.getElementById('kpNote').textContent=bits.join('. ')+'.';
+    if(local) feed(t('fMag'),true,
+      local.all.map(a=>a.station+' '+a.r+' nT').join(' · ')
+      +' · '+local.best.minutes+' min · CC BY 4.0');
+    if(d.current!=null||d.peak!=null) feed(t('fKp'),true,
+      (d.current!=null?'now '+d.current.toFixed(2):'')
+      +(d.peak!=null?(d.current!=null?' · ':'')+'peak '+d.peak.toFixed(2)+'/24h':'')
+      +(d.forecast&&d.forecast.length?' · '+d.forecast.length+' pts':''));
+    if(d.bz!=null) feed(t('fWind'),true,'Bz '+d.bz.toFixed(2)+' nT');
+    if(d.notes&&d.notes.length) feed(t('fSpace'),false,d.notes.join(' · '));
+  }catch(e){
+    document.getElementById('kpVal').textContent='—';
+    document.getElementById('kpNote').textContent=t('unavailable');
+    feed(t('fSpace'),false,e.message==='Failed to fetch'?t('fNoFn'):e.message);
+  }
+
+  const cards=[];
+  for(let n=0;n<3;n++){
+    const P0=hP(now), day=hDate(P0.y,P0.mo,P0.d+n,12);
+    const lo=minSunOn(day);
+    const mo=moonAt(hDate(P0.y,P0.mo,P0.d+n+1,0));
+    const nA=hDate(P0.y,P0.mo,P0.d+n,20), nB=hDate(P0.y,P0.mo,P0.d+n+1,5);
+    const kA=hDate(P0.y,P0.mo,P0.d+n,18), kB=hDate(P0.y,P0.mo,P0.d+n+1,6);
+    let c=null;
+    if(hourly){ const v=[]; hourly.t.forEach((x,i)=>{
+      if(x>=nA && x<=nB && sunAlt(x)<-3) v.push(hourly.cloud_cover[i]); });
+      if(v.length) c=v.reduce((a,b)=>a+b,0)/v.length; }
+    let k=null; fc.forEach(f=>{ const x=new Date(f.t);
+      if(x>=kA && x<=kB && (k===null||f.kp>k)) k=f.kp; });
+    const dk=tierOf(lo);
+    const score = dk.t<2?t('sTooLight') : (c!==null&&c>75)?t('sClouded')
+      : (mo.alt>0&&mo.illum>0.7)?t('sMoonlit') : (k!==null&&k>=3.5)?t('sPromising'):t('sPossible');
+    const cls = score===t('sPromising')?'pass':score===t('sPossible')?'':'fail';
+    cards.push(`<div class="night"><div class="when">${n===0?t('tonight'):fmtDay(day)}</div>
+      <div class="score ${cls}">${score}</div><div class="bits">${t('bSun')} ${lo.toFixed(1)}°<br>
+      ${t('bCloud')} ${c!==null?Math.round(c)+'%':'—'}<br>${t('gMoon').toLowerCase()} ${Math.round(mo.illum*100)}%
+      ${mo.alt>0?t('bMoonUp'):t('bMoonDown')}<br>kp ${k!==null?k.toFixed(1):'—'}</div></div>`);
+  }
+  document.getElementById('nights').innerHTML=cards.join('');
+
+  /* Nine states, first match wins. The eyebrow is judged separately: it reports
+     what the sun is doing, the headline reports whether you will see it.
+     VERDICT_RULES is mirrored in functions/api/log.js — keep them in step. */
+  const a=document.getElementById('answer'), b=document.getElementById('because'),
+        eb=document.getElementById('t-eyebrow');
+  const lr    = local?local.best.r:null;
+  const act   = lr!==null ? Math.round(lr)+' nT' : (kp!==null?'Kp '+kp.toFixed(1):t('kpUnknown'));
+  const cStr  = cloud!==null?t('cloudPct',Math.round(cloud)):t('cloudUnknown');
+  const quiet = lr!==null ? lr<100  : (kp!==null && kp<1.5);
+  const good  = lr!==null ? lr>=250 : (kp!==null && kp>=3.5);
+  const storm = lr!==null ? lr>=500 : (kp!==null && kp>=5);
+  const clear = cloud===null || cloud<45;
+  const murky = cloud!==null && cloud>=45 && cloud<=80;
+  const moonBad = mn.alt>0 && mn.illum>0.7;
+  const key = verdictKey({darkT:dark.t, quiet, storm, good, clear, murky, moonBad,
+                          cloud, overcast: cloud!==null&&cloud>80});
+  const cloudWord = cloud!==null?t('cloudPct',Math.round(cloud)):t('clear');
+  let cls='maybe', head='', text='', big=false;
+  switch(key){
+    case 'darkNever': { const nd=nextDark(now); cls='no'; head=t('hNotTonight');
+      text=nd?t('bNeverDark',fmtD(nd.date),nd.days):t('bNeverDarkPlain'); break; }
+    case 'nautQuiet': cls='no'; head=t('hNotTonight');   text=t('bNautQuiet',act); break;
+    case 'naut':      cls='no'; head=t('hProbablyNot');  text=t('bNaut'); break;
+    case 'overcast':  cls='no'; head=t('hClouded');      text=t('bClouded',Math.round(cloud)); break;
+    case 'quiet':     cls='no'; head=t('hQuiet');        text=t('bQuiet',act); break;
+    case 'goNow':     cls='go'; big=true; head=t('hGoNow');
+                      text=t('bGoNow',act,cloudWord,dark.name.toLowerCase()); break;
+    case 'go':        cls='go'; head=t('hGo');
+                      text=t('bGo',act,cloudWord,dark.name.toLowerCase()); break;
+    case 'moon':      head=t('hMoon');     text=t('bMoon',ill,mn.alt.toFixed(0)); break;
+    case 'cloudWay':  head=t('hCloudWay'); text=t('bCloudWay',act,cStr); break;
+    default:          head=t('hLook');     text=t('bLook',dark.name,cStr,act);
+  }
+
+  if(win && pts[win.a].t.getTime() > now.getTime()+30*60000) text += t('bestFrom', fmtT(pts[win.a].t));
+
+  a.className='answer '+cls+(big?' storm':''); a.textContent=head; b.innerHTML=text;
+  eb.textContent = storm ? t('eyebrowStorm') : t('eyebrow');
+  eb.className = 'eyebrow'+(storm?' storm':'');
+
+  LAST={pts,low,win,now,dark:dark.t,r:local?local.best.r:null,kp,moon:mn};
+  drawSky(dark.t, local?local.best.r:null, kp, mn);
+  drawYear(now);
+  paintCamera(kp,ill,mn.alt>0);
+  renderFeeds();
+  lastRun=Date.now(); stamp();
+}
+
+function setLang(l){ LANG=l; try{localStorage.setItem('oulu-lang',l);}catch(e){} run(); }
+document.getElementById('lang').addEventListener('change',e=>setLang(e.target.value));
+document.getElementById('mode').addEventListener('click',()=>{
+  MODE=MODE==='night'?'day':'night';
+  try{localStorage.setItem('oulu-mode',MODE);}catch(e){}
+  document.body.dataset.mode=MODE;
+  const tc=document.querySelector('meta[name="theme-color"]');
+  if(tc) tc.content = MODE==='night'?'#0A0000':'#150E33';
+  document.getElementById('mode').setAttribute('aria-pressed',MODE==='night');
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.qbtn'); if(!b) return;
+  const box=document.getElementById(b.dataset.q+'Q');
+  b.setAttribute('aria-expanded', box.classList.toggle('show'));
+});
+document.addEventListener('keydown',e=>{ if(e.key!=='Escape') return;
+  document.querySelectorAll('.qbox.show').forEach(x=>{ x.classList.remove('show');
+    const b=document.querySelector('.qbtn[data-q="'+x.id.replace('Q','')+'"]');
+    if(b) b.setAttribute('aria-expanded','false'); }); });
+document.getElementById('refresh').addEventListener('click',run);
+setInterval(stamp,30000);
+setInterval(()=>{ if(document.visibilityState==='visible') run(); },300000);
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible' && lastRun && Date.now()-lastRun>300000) run();
+});
+let rsz; addEventListener('resize',()=>{ clearTimeout(rsz); rsz=setTimeout(()=>{
+  if(LAST){ draw(LAST.pts,LAST.low,LAST.win); drawYear(LAST.now);
+    drawSky(LAST.dark,LAST.r,LAST.kp,LAST.moon); } },200); });
+run();
+</script>
+</body>
+</html>
