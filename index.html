@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Oulu — darkness &amp; aurora</title>
-<meta name="description" content="Can you see the northern lights in Oulu tonight? Live darkness, cloud, moon and space weather.">
+<meta name="description" content="Can you see the northern lights in Oulu tonight? Live darkness, cloud, rain, moon and space weather, in five languages.">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -18,13 +18,15 @@
 <meta property="og:url" content="https://oulu-aurora.pages.dev/">
 <meta property="og:site_name" content="Oulu — darkness &amp; aurora">
 <meta property="og:title" content="Oulu — darkness &amp; aurora">
-<meta property="og:description" content="Can you see the northern lights in Oulu tonight? Live darkness, cloud, moon and space weather — plus where to go.">
+<meta property="og:description" content="Can you see the northern lights in Oulu tonight? Live darkness, cloud, rain, moon and space weather — plus where to go and when.">
 <meta property="og:image" content="https://oulu-aurora.pages.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="An aurora arc over a dark horizon">
 <meta property="og:locale" content="en_GB">
 <meta property="og:locale:alternate" content="fi_FI">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:locale:alternate" content="fr_FR">
 <meta property="og:locale:alternate" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Oulu — darkness &amp; aurora">
@@ -373,9 +375,7 @@ en:{ locale:'en-GB',
  fMag:'Magnetometer · FMI', fKp:'Planetary Kp · NOAA SWPC', fWind:'Solar wind · NOAA SWPC',
  bzSouthStrong:'south — strongly favourable',
  kpScale:[
-  {h:'Local disturbance · last 90 min',r:[['under 100 nT','quiet; ordinary night-time drift'],
-   ['100–250 nT','something stirring; look north'],['250–500 nT','active; good chance overhead'],
-   ['over 500 nT','storm']]},
+  {h:'Local disturbance · last 90 min',r:[['under 40 nT','quiet; ordinary night-time drift'],['40–80 nT','something stirring; look north'],['80–250 nT','active; good chance overhead'],['over 250 nT','storm']]},
   {h:'Global Kp · planetary, 3-hourly',r:[['under 2','too quiet for Oulu'],
    ['2–3','northern horizon only'],['4–5','can reach overhead'],['over 5','geomagnetic storm']]},
   {h:'Bz · direction of the solar wind field',r:[['above 0','pointing north; unfavourable'],
@@ -471,9 +471,7 @@ fi:{ locale:'fi-FI',
  fMag:'Magnetometri · Ilmatieteen laitos', fKp:'Planetaarinen Kp · NOAA SWPC', fWind:'Aurinkotuuli · NOAA SWPC',
  bzSouthStrong:'etelään — erittäin edullinen',
  kpScale:[
-  {h:'Paikallinen häiriö · viimeiset 90 min',r:[['alle 100 nT','rauhallista; tavallista yövaihtelua'],
-   ['100–250 nT','jotain liikkuu; katso pohjoiseen'],['250–500 nT','aktiivista; hyvä mahdollisuus zeniitissä'],
-   ['yli 500 nT','myrsky']]},
+  {h:'Paikallinen häiriö · viimeiset 90 min',r:[['alle 40 nT','rauhallista; tavallista yövaihtelua'],['40–80 nT','jotain liikkuu; katso pohjoiseen'],['80–250 nT','aktiivista; hyvä mahdollisuus zeniitissä'],['yli 250 nT','myrsky']]},
   {h:'Globaali Kp · planetaarinen, kolmen tunnin',r:[['alle 2','liian rauhallista Oululle'],
    ['2–3','vain pohjoinen taivaanranta'],['4–5','voi ulottua zeniittiin'],['yli 5','geomagneettinen myrsky']]},
   {h:'Bz · aurinkotuulen kentän suunta',r:[['yli 0','osoittaa pohjoiseen; epäedullinen'],
@@ -570,9 +568,7 @@ es:{ locale:'es-ES',
  fMag:'Magnetómetro · IM de Finlandia', fKp:'Kp planetario · NOAA SWPC', fWind:'Viento solar · NOAA SWPC',
  bzSouthStrong:'sur — muy favorable',
  kpScale:[
-  {h:'Perturbación local · últimos 90 min',r:[['menos de 100 nT','tranquilo; variación nocturna normal'],
-   ['100–250 nT','algo se mueve; mira al norte'],['250–500 nT','activo; buenas opciones en el cenit'],
-   ['más de 500 nT','tormenta']]},
+  {h:'Perturbación local · últimos 90 min',r:[['menos de 40 nT','tranquilo; variación nocturna normal'],['40–80 nT','algo se mueve; mira al norte'],['80–250 nT','activo; buenas opciones en el cenit'],['más de 250 nT','tormenta']]},
   {h:'Kp global · planetario, tres horas',r:[['menos de 2','demasiado tranquilo para Oulu'],
    ['2–3','solo horizonte norte'],['4–5','puede llegar al cenit'],['más de 5','tormenta geomagnética']]},
   {h:'Bz · dirección del campo del viento solar',r:[['por encima de 0','apunta al norte; desfavorable'],
@@ -658,9 +654,7 @@ de:{ locale:'de-DE',
  qKp:'Die Hauptzahl ist die magnetische Störung an der Oulu nächstgelegenen Station des finnischen Wetterdienstes — die größte Schwankung des Horizontalfeldes in den letzten 90 Minuten, in Nanotesla. Ein Magnetometer 100 km entfernt sagt mehr als der globale Kp-Index, ein dreistündiger planetarer Mittelwert. Kp steht zum Vergleich daneben. Die Schwellenwerte sind vorläufig und werden im Winter anhand von Nächten mit tatsächlichen Nordlichtern nachgezogen.',
  bzSouthStrong:'südwärts — sehr günstig',
  kpScale:[
-  {h:'Lokale Störung · letzte 90 Min.',r:[['unter 100 nT','ruhig; normale nächtliche Schwankung'],
-   ['100–250 nT','es regt sich; nach Norden schauen'],['250–500 nT','aktiv; gute Chance im Zenit'],
-   ['über 500 nT','Sturm']]},
+  {h:'Lokale Störung · letzte 90 Min.',r:[['unter 40 nT','ruhig; normale nächtliche Schwankung'],['40–80 nT','es regt sich; nach Norden schauen'],['80–250 nT','aktiv; gute Chance im Zenit'],['über 250 nT','Sturm']]},
   {h:'Globales Kp · planetar, dreistündig',r:[['unter 2','zu ruhig für Oulu'],
    ['2–3','nur nördlicher Horizont'],['4–5','kann den Zenit erreichen'],['über 5','geomagnetischer Sturm']]},
   {h:'Bz · Richtung des Sonnenwindfelds',r:[['über 0','nach Norden; ungünstig'],
@@ -756,9 +750,7 @@ fr:{ locale:'fr-FR',
  qKp:'Le chiffre principal est la perturbation magnétique à la station de l’Institut météorologique finlandais la plus proche d’Oulu — la plus grande variation du champ horizontal sur les 90 dernières minutes, en nanoteslas. Un magnétomètre à 100 km en dit plus que l’indice Kp global, une moyenne planétaire sur trois heures. Le Kp figure à côté pour référence. Les seuils sont provisoires et seront affinés cet hiver, confrontés aux nuits où des aurores apparaissent réellement.',
  bzSouthStrong:'vers le sud — très favorable',
  kpScale:[
-  {h:'Perturbation locale · 90 dernières minutes',r:[['moins de 100 nT','calme ; variation nocturne ordinaire'],
-   ['100–250 nT','quelque chose bouge ; regarde au nord'],['250–500 nT','actif ; bonnes chances au zénith'],
-   ['plus de 500 nT','tempête']]},
+  {h:'Perturbation locale · 90 dernières minutes',r:[['moins de 40 nT','calme ; variation nocturne ordinaire'],['40–80 nT','quelque chose bouge ; regarde au nord'],['80–250 nT','actif ; bonnes chances au zénith'],['plus de 250 nT','tempête']]},
   {h:'Kp global · planétaire, trois heures',r:[['moins de 2','trop calme pour Oulu'],
    ['2–3','horizon nord seulement'],['4–5','peut atteindre le zénith'],['plus de 5','tempête géomagnétique']]},
   {h:'Bz · direction du champ du vent solaire',r:[['au-dessus de 0','vers le nord ; défavorable'],
@@ -814,6 +806,12 @@ const ICON={
 };
 const ico=(n,cls)=>'<svg class="ico '+(cls||'')+'" viewBox="0 0 16 16" aria-hidden="true">'+ICON[n]+'</svg>';
 const TIPICONS=['clock','eye','north','camera','lamp','temp'];
+
+/* Provisional local-disturbance thresholds, in nT over a 90-minute window.
+   Revised 29/07/2026 from two observations at Oulujärvi: Kp 0 gave ~20 nT and
+   Kp 2 gave ~60 nT, which put the previous set (100/250/500) far too high — it
+   would have called a Kp 4 night quiet. Still provisional; the logger settles it. */
+const NT = { quiet: 40, active: 80, storm: 250 };
 
 // Coordinates verified against Google Places; index-matched to spotList.
 const SPOTGEO=[
@@ -1031,7 +1029,7 @@ const verdictKey = c => VERDICT_RULES.find(r=>r[1](c))[0];
    strong. Approximate, and following the same provisional thresholds. */
 function auroraBand(darkTier, r, kp){
   if(darkTier<2) return null;
-  const lvl = r!==null ? (r>=500?3 : r>=250?2 : r>=100?1 : 0)
+  const lvl = r!==null ? (r>=NT.storm?3 : r>=NT.active?2 : r>=NT.quiet?1 : 0)
             : (kp!==null ? (kp>=5?3 : kp>=3.5?2 : kp>=2?1 : 0) : 0);
   return [[2,13],[10,30],[25,60],[45,90]][lvl];
 }
@@ -1241,9 +1239,9 @@ async function run(){
     /* Anchored on 28 Jul 2026: FMI reported calm, Kp 2, local reading ~60 nT.
        So 60 nT is quiet-day variation at this latitude, not activity.
        Still provisional — tighten against nights aurora actually appear. */
-    const good   = lr!==null ? lr>=250 : kp>=3.5;
-    const mid    = lr!==null ? lr>=100 : kp>=1.5;
-    const strong = lr!==null ? lr>=500 : kp>=5;
+    const good   = lr!==null ? lr>=NT.active : kp>=3.5;
+    const mid    = lr!==null ? lr>=NT.quiet  : kp>=1.5;
+    const strong = lr!==null ? lr>=NT.storm  : kp>=5;
     document.getElementById('kpVal').textContent = lr!==null ? Math.round(lr)+' nT'
       : (kp!=null?'Kp '+kp.toFixed(1):'—');
     document.getElementById('kpVal').className='gate-value '+(good?'pass':mid?'warn':'fail');
@@ -1253,15 +1251,33 @@ async function run(){
     if(bz!=null) bits.push('Bz '+bz.toFixed(1)+' nT '+(bz<-10?t('bzSouthStrong'):bz<-5?t('bzSouthGood'):bz<0?t('bzSouth'):t('bzNorth')));
     bits.push(strong?t('kpStorm'):good?t('kpActive'):mid?t('kpLow'):t('kpQuiet'));
     document.getElementById('kpNote').textContent=bits.join('. ')+'.';
-    if(local) feed(t('fMag'),true,
-      local.all.map(a=>a.station+' '+a.r+' nT').join(' · ')
-      +' · '+local.best.minutes+' min · CC BY 4.0');
-    if(d.current!=null||d.peak!=null) feed(t('fKp'),true,
+    /* One line per source, red only when that source actually failed. Notes are
+       attached to the source they concern — a missing secondary station is
+       information, not an outage. */
+    const H = d.health || {};
+    const notesFor = re => (d.notes || []).filter(n => re.test(n));
+    const tail = ns => ns.length ? ' · ' + ns.join(' · ') : '';
+
+    const fmiNotes = notesFor(/^fmi/i);
+    if(local) feed(t('fMag'), true,
+      local.all.map(a=>a.station+' '+a.r+' nT ('+a.samples+')').join(' · ')
+      + ' · ' + local.best.minutes + ' min · CC BY 4.0' + tail(fmiNotes));
+    else feed(t('fMag'), false, fmiNotes.join(' · ') || t('unavailable'));
+
+    const kpNotes = notesFor(/^kp/i);
+    if(H.kp || d.current!=null || d.peak!=null) feed(t('fKp'), true,
       (d.current!=null?'now '+d.current.toFixed(2):'')
       +(d.peak!=null?(d.current!=null?' · ':'')+'peak '+d.peak.toFixed(2)+'/24h':'')
-      +(d.forecast&&d.forecast.length?' · '+d.forecast.length+' pts':''));
-    if(d.bz!=null) feed(t('fWind'),true,'Bz '+d.bz.toFixed(2)+' nT');
-    if(d.notes&&d.notes.length) feed(t('fSpace'),false,d.notes.join(' · '));
+      +(d.forecast&&d.forecast.length?' · '+d.forecast.length+' pts':'') + tail(kpNotes));
+    else feed(t('fKp'), false, kpNotes.join(' · ') || t('unavailable'));
+
+    const bzNotes = notesFor(/^bz/i);
+    if(d.bz!=null) feed(t('fWind'), true, 'Bz '+d.bz.toFixed(2)+' nT' + tail(bzNotes));
+    else if(bzNotes.length) feed(t('fWind'), false, bzNotes.join(' · '));
+
+    /* anything that did not match a source */
+    const other = (d.notes||[]).filter(n=>!/^(fmi|kp|bz)/i.test(n));
+    if(other.length) feed(t('fSpace'), false, other.join(' · '));
   }catch(e){
     document.getElementById('kpVal').textContent='—';
     document.getElementById('kpNote').textContent=t('unavailable');
@@ -1300,9 +1316,9 @@ async function run(){
   const lr    = local?local.best.r:null;
   const act   = lr!==null ? Math.round(lr)+' nT' : (kp!==null?'Kp '+kp.toFixed(1):t('kpUnknown'));
   const cStr  = cloud!==null?t('cloudPct',Math.round(cloud)):t('cloudUnknown');
-  const quiet = lr!==null ? lr<100  : (kp!==null && kp<1.5);
-  const good  = lr!==null ? lr>=250 : (kp!==null && kp>=3.5);
-  const storm = lr!==null ? lr>=500 : (kp!==null && kp>=5);
+  const quiet = lr!==null ? lr<NT.quiet   : (kp!==null && kp<1.5);
+  const good  = lr!==null ? lr>=NT.active : (kp!==null && kp>=3.5);
+  const storm = lr!==null ? lr>=NT.storm  : (kp!==null && kp>=5);
   const clear = cloud===null || cloud<45;
   const murky = cloud!==null && cloud>=45 && cloud<=80;
   const moonBad = mn.alt>0 && mn.illum>0.7;
