@@ -84,6 +84,35 @@ The function returns a health summary. Use an external monitor; no code needed.
   ever revisited, note that Visit Oulu's media bank would tie the personal project to
   employer assets.
 
+### Logger — set this up
+Code is deployed and refusing every request until it is configured. Nothing on the
+public site changes.
+
+- [ ] **Create the Sheet.** New Google Sheet → Extensions → Apps Script → delete the
+      placeholder → paste `sheet-logger.gs` → change `SECRET` to a long random string →
+      **Deploy → New deployment → type Web app**, execute as *Me*, access *Anyone*.
+      Google will warn the app is unverified: Advanced → Go to project → Allow.
+      Copy the `/exec` URL.
+- [ ] **Set the Cloudflare variables.** Dashboard → your Pages project → Settings →
+      Variables and Secrets → add to **Production**: `LOG_SECRET` (the same random
+      string) and `SHEET_URL` (the /exec URL). **Then redeploy** — variables are not
+      picked up until the next deployment.
+- [ ] **Test before wiring cron.** Visit `/api/log?key=YOUR_SECRET`.
+      Expect `"stored":"inserted"`. A 503 means LOG_SECRET is unset or the redeploy has
+      not run; `HTTP 401` from the sheet means the two secrets do not match.
+- [ ] **Hourly cron.** Cloudflare **Pages** has no cron triggers — those are a Workers
+      feature — so use a free scheduler (cron-job.org, Better Stack) pointed at
+      `https://oulu-aurora.pages.dev/api/log?key=YOUR_SECRET`, every hour at minute 0.
+- [ ] Run it **all year**. The summer rows are the quiet-day baseline the thresholds
+      need, and they cannot be recovered later.
+
+### Licensing to check before any commercial use
+- [ ] **Open-Meteo's free tier is for non-commercial use.** Fine as things stand — the
+      site is free and personal. If it is ever monetised, or formally adopted by
+      BusinessOulu or VNF, check their terms and the call volume.
+- [ ] FMI data is CC BY 4.0 and already attributed on the page and in the structured
+      data.
+
 ### Other
 - [ ] **Self-host the two typefaces** instead of loading from Google Fonts. Currently
       the only third-party call that sees a visitor's IP without needing to. Also
@@ -140,6 +169,8 @@ Changes from the current five states:
 - [ ] **Implement the nine states**, including all five translations.
 - [ ] **Review the wording again once it has run in darkness.** Several of these have
       never been seen in situ.
+- [ ] **Recheck the thresholds again after a handful of visible nights.** They have
+      moved once already on two data points.
 - [ ] **Track how often state 5 fires.** If 500 nT turns out to be commonplace at this
       latitude, the rare state becomes routine and the pink eyebrow stops meaning
       anything. Threshold and frequency both need checking, not just the threshold.
@@ -151,9 +182,15 @@ Changes from the current five states:
 Aurora season in Oulu resumes around **18 August 2026**. Nothing below can be tested
 before then.
 
-- [ ] Log the local nT reading on nights aurora are actually visible. Current
-      thresholds (quiet <100, active >250, storm >500 nT) are anchored on a single
-      quiet-day observation of ~60 nT on 28/07/2026.
+- [ ] Log the local nT reading on nights aurora are actually visible. Thresholds are
+      now **quiet <40, active >80, storm >250 nT**, defined once as `NT` in
+      `index.html` and mirrored in `functions/api/log.js`.
+
+      Revised 29/07/2026 from two observations at Oulujärvi: **Kp 0 → ~20 nT** and
+      **Kp 2 → ~60 nT**. The previous set (100/250/500) would have called a Kp 4 night
+      "quiet sky", and 250 nT for "Go outside" implied roughly Kp 12. Two points is
+      thin and the K-index is quasi-logarithmic, so these remain provisional — but
+      both observations pointed the same way.
 - [ ] Test the paths that only fire in darkness: best-window band, "Go outside"
       verdict, camera settings during real activity.
 - [ ] Sanity-check the three-night outlook against what actually happened.
@@ -186,6 +223,9 @@ before then.
 - Per-source status panel with independent failure reporting
 - Health summary and `status` keyword in the function, for uptime monitoring
 - Disclaimer line, privacy note and Visit Oulu source credit
+- Structured data (JSON-LD): the app, Oulu with coordinates, the four viewing spots as
+  tourist attractions with their own coordinates, and the three data sources as
+  datasets with creators and the FMI licence
 - Ported to Cloudflare Pages Functions; endpoint moved to `/api/spacewx`
 - Endpoint locked to same-origin — no CORS header, so a clone hosted elsewhere
   cannot use this backend
